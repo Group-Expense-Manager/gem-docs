@@ -28,3 +28,6 @@
 * Stworzenie organizacji na postmanie
 ### 18.03.2024 - 24.03.2024
 * Stworzenie dokumentacji na github pages
+* Pisanie pierwszego rozdziału pracy inżynierskiej
+* Ulepszenia schematu serwisu o testy integracyjnie i jednostoke
+* Dostosowanie platofry Jira
