@@ -30,4 +30,8 @@
 * Stworzenie dokumentacji na github pages
 * Pisanie pierwszego rozdziału pracy inżynierskiej
 * Ulepszenia schematu serwisu o testy integracyjnie i jednostoke
-* Dostosowanie platofry Jira
+* Dostosowanie platformy Jira
+### 25.03.2024 - 31.03.2024
+* Początek implementacji widoku autentykacji na froncie
+* Ulepszenia schematu serwisu o testy integracyjnie i jednostoke
+* Pisanie pierwszego rozdziału pracy inżynierskiej
