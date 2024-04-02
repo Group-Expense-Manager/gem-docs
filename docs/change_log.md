@@ -35,3 +35,4 @@
 * Początek implementacji widoku autentykacji na froncie
 * Ulepszenia schematu serwisu o testy integracyjnie i jednostoke
 * Pisanie pierwszego rozdziału pracy inżynierskiej
+* Implementacja serwisu autentykacyjnego
