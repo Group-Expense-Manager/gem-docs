@@ -37,6 +37,9 @@ theme:
 
 plugins:
   - social
+  - search
+  - mermaid2
+  - autolinks
 
 extra:
   social:
