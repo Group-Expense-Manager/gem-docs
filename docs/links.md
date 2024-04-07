@@ -1,9 +1,9 @@
 # Links
 
-Jira  
+Jira :jira:
 
-Github 
+Github :github:
 
-Overleaf 
+Overleaf :leaf:
 
 
