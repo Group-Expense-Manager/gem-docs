@@ -1,10 +1,14 @@
 # Diagrams
 
-```mermaid
-pie title Which animals do you prefer as pets?
-    "Dogs" : 386
-    "Cats" : 85
-    "Rabbits" : 53
-    "Hamsters" : 101
+``` mermaid
+sequenceDiagram
+  autonumber
+  Alice->>John: Hello John, how are you?
+  loop Healthcheck
+      John->>John: Fight against hypochondria
+  end
+  Note right of John: Rational thoughts!
+  John-->>Alice: Great!
+  John->>Bob: How about you?
+  Bob-->>John: Jolly good!
 ```
-
