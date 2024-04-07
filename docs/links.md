@@ -1,9 +1,8 @@
 # Links
 
-Jira :jira:
+Jira :fontawesome-regular-face-laugh-wink:
 
-Github :github:
+Github :fontawesome-github:
 
-Overleaf :leaf:
-
+Overleaf ::fontawesome-leaf:
 
