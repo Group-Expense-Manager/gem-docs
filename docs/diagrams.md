@@ -110,3 +110,92 @@ ApiGateway->>+GroupManager:  POST /external/group/join (id + join code)
 GroupManager->>-ApiGateway: OK (group data)
 ApiGateway->>-Client: OK (group data)
 ```
+
+## Expense Manager
+
+``` mermaid
+sequenceDiagram
+
+Client->>+ApiGateway: POST /external/expense/{group_id} (token + expense data)
+ApiGateway->>+ExpenseManager: POST /external/expense/{group_id} (id + expense data)
+ExpenseManager->>+GroupManager: GET /internal/group/{group_id}
+GroupManager->>-ExpenseManager: OK (group data)
+ExpenseManager->>-ApiGateway: CREATED
+ApiGateway->>-Client: CREATED
+
+
+Client->>+ApiGateway: PUT /external/expense/{group_id}/{expense_id} (token + updated expense data)
+ApiGateway->>+ExpenseManager: PUT /external/expense/{group_id}/{expense_id} (id + updated expense data)
+ExpenseManager->>+GroupManager: GET /internal/group/{group_id}
+GroupManager->>-ExpenseManager: OK (group data)
+ExpenseManager->>-ApiGateway: OK
+ApiGateway->>-Client: OK
+
+Client->>+ApiGateway: DELETE /external/expense/{group_id}/{expense_id} (token)
+ApiGateway->>+ExpenseManager: DELETE /external/expense/{group_id}/{expense_id} (id)
+ExpenseManager->>-ApiGateway: OK
+ApiGateway->>-Client: OK
+
+Client->>+ApiGateway: GET /external/expense/{group_id} (token + filters)
+ApiGateway->>+ExpenseManager: GET /external/expense/{group_id} (id + filters)
+ExpenseManager->>+GroupManager: GET /internal/group?user_id=val
+GroupManager->>-ExpenseManager: OK
+ExpenseManager->>-ApiGateway: OK + ids + names  + date + status
+ApiGateway->>-Client: OK + ids + names  + date + status
+
+
+Client->>+ApiGateway: GET /external/expense/{expense_id} (token)
+ApiGateway->>+ExpenseManager: GET /external/expense/{expense_id} (id)
+ExpenseManager->>-ApiGateway: OK + expense data
+ApiGateway->>-Client: OK + expense data
+
+Client->>+ApiGateway: POST /external/accept-expense/{expense_id} (token + resolve)
+ApiGateway->>+ExpenseManager: POST /external/accept-expense/{expense_id} (id + resolve)
+ExpenseManager->>-ApiGateway: OK
+ApiGateway->>-Client: OK
+```
+
+## Payment Manager
+
+``` mermaid
+sequenceDiagram
+
+Client->>+ApiGateway: POST /external/payment/{group_id} (token + payment data)
+ApiGateway->>+PaymentManager: POST /external/payment/{group_id} (id + payment data)
+PaymentManager->>+GroupManager: GET /internal/group/{group_id}
+GroupManager->>-PaymentManager: OK (group data)
+PaymentManager->>-ApiGateway: CREATED
+ApiGateway->>-Client: CREATED
+
+Client->>+ApiGateway: PUT /external/payment/{group_id}/{payment_id} (token + updated payment data)
+ApiGateway->>+PaymentManager: PUT /external/payment/{group_id}/{payment_id} (id + updated payment data)
+PaymentManager->>+GroupManager: GET /internal/group/{group_id}
+GroupManager->>-PaymentManager: OK (group data)
+PaymentManager->>-ApiGateway: OK
+ApiGateway->>-Client: OK
+
+Client->>+ApiGateway: DELETE /external/payment/{group_id}/{payment_id} (token + updated payment data)
+ApiGateway->>+PaymentManager: DELETE /external/payment/{group_id}/{payment_id} (id + updated payment data)
+PaymentManager->>+GroupManager: GET /internal/group?user_id=val
+GroupManager->>-PaymentManager: OK
+PaymentManager->>-ApiGateway: OK
+ApiGateway->>-Client: OK
+
+Client->>+ApiGateway: GET /external/payment/{group_id} (token + filters)
+ApiGateway->>+PaymentManager: GET /external/payment/{group_id} (id + filters)
+PaymentManager->>+GroupManager: GET /internal/group?user_id=val
+GroupManager->>-PaymentManager: OK
+PaymentManager->>-ApiGateway: OK + ids + names + date + status
+ApiGateway->>-Client: OK + ids + names + date + status
+
+
+Client->>+ApiGateway: GET /external/payment/{payment_id} (token + filters)
+ApiGateway->>+PaymentManager: GET /external/payment/{payment_id} (id + filters)
+PaymentManager->>-ApiGateway: OK + payment data
+ApiGateway->>-Client: OK + payment data
+
+Client->>+ApiGateway: POST /external/accept-payment/{payment_id} (token + resolve)
+ApiGateway->>+PaymentManager: POST /external/accept-payment/{payment_id} (id + resolve)
+PaymentManager->>-ApiGateway: OK
+ApiGateway->>-Client: OK
+```
