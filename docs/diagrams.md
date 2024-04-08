@@ -199,3 +199,28 @@ ApiGateway->>+PaymentManager: POST /external/accept-payment/{payment_id} (id + r
 PaymentManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 ```
+
+## Alignment Connector
+
+``` mermaid
+sequenceDiagram
+
+Client->>+ApiGateway: GET /external/balance/{group_id}/{user_id} (token)
+ApiGateway->>+AlignmentConnector: GET /external/balance/{group_id}/{user_id} (id)
+AlignmentConnector->>+ ExpenseManager: GET /internal/balance/{group_id}/{user_id} (id)
+ExpenseManager->>- AlignmentConnector: OK (balance of user)
+AlignmentConnector->>+ PaymentManager: GET /internal/balance/{group_id}/{user_id} (id)
+PaymentManager->>- AlignmentConnector: OK (balance of user)
+AlignmentConnector->>- ApiGateway: OK (balance of user)
+ApiGateway->>-Client: OK (balance of user)
+
+Client->>+ApiGateway: GET /external/balance/{group_id} (token)
+ApiGateway->>+AlignmentConnector: GET /external/balance/{group_id} (id)
+AlignmentConnector->>+ ExpenseManager: GET /internal/balance/{group_id}/(id)
+ExpenseManager->>- AlignmentConnector: OK (balance of group members)
+AlignmentConnector->>+ PaymentManager: GET /internal/balance/{group_id} (id)
+PaymentManager->>- AlignmentConnector: OK (balance of group members)
+AlignmentConnector->>- ApiGateway: OK (balance of group members)
+ApiGateway->>-Client: OK (balance of group members)
+
+```
