@@ -33,6 +33,11 @@
 * Dostosowanie platformy Jira
 ### 25.03.2024 - 31.03.2024
 * Początek implementacji widoku autentykacji na froncie
-* Ulepszenia schematu serwisu o testy integracyjnie i jednostoke
+* Ulepszenia schematu serwisu o testy integracyjnie i jednostowe
 * Pisanie pierwszego rozdziału pracy inżynierskiej
 * Implementacja serwisu autentykacyjnego
+## Kwiecień 2024
+### 01.04.2024 - 07.04.2024
+* Implementacja serwisu autentykacyjnego
+* Tworzenie diagramów uml dla każdego serwisu
+* Zapisanie się na konsultacje u opiekuna w celu przedstawienia szkicu pierwszego rozdziału pracy inżynierskiej
