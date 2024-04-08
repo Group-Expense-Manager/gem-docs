@@ -2,6 +2,8 @@
 
 ## Authenticator
 ``` mermaid
+sequenceDiagram
+
 Client->>+ApiGateway: POST open/register (user data)
 ApiGateway->>+Authenticator: POST open/register (user data)
 Authenticator->>-ApiGateway: CREATED
@@ -53,7 +55,6 @@ ApiGateway->>-Client: OK
 
 ``` mermaid
 sequenceDiagram
-title UserDetailsManager
 
 Client->>+ApiGateway: PUT /external/user-details (token + username,firstname,lastname,pfp?)
 ApiGateway->>+Authenticator: PUT /external/user-details (id + username,firstname,lastname,pfp?)
@@ -73,4 +74,39 @@ Authenticator->>+ GroupManager: /internal/group?user_id=val
 GroupManager->>- Authenticator: OK
 Authenticator->>-ApiGateway: OK
 ApiGateway->>-Client: OK
+```
+
+## Group Manager
+
+``` mermaid
+sequenceDiagram
+
+Client->>+ApiGateway: POST /external/group (token + group name,currencies,options,colour)
+ApiGateway->>+GroupManager:  POST /external/group (id + group name,currencies,options,colour)
+GroupManager->>+CurrencyManager: GET /internal/currency
+CurrencyManager->>-GroupManager: OK (available currencies)
+GroupManager->>-ApiGateway: CREATED
+ApiGateway->>-Client: CREATED
+
+Client->>+ApiGateway: DELETE /external/group/{group_id} (token)
+ApiGateway->>+GroupManager:  POST /external/group/{group_id} (id)
+GroupManager->>+AligmentConnector: GET /internal/balance/{group_id} (id)
+AligmentConnector->>-GroupManager: OK (balance of users)
+GroupManager->>-ApiGateway: OK
+ApiGateway->>-Client: OK
+
+Client->>+ApiGateway: PUT /external/group/{group_id} (token + group name,colour)
+ApiGateway->>+GroupManager:  PUT /external/group/{group_id} (id + group name,colour)
+GroupManager->>-ApiGateway: OK
+ApiGateway->>-Client: OK
+
+Client->>+ApiGateway: GET /external/group/{group_id} (token)
+ApiGateway->>+GroupManager:  GET /external/group/{group_id} (id)
+GroupManager->>-ApiGateway: OK (group data)
+ApiGateway->>-Client: OK (group data)
+
+Client->>+ApiGateway: POST /external/group/join (token + join code)
+ApiGateway->>+GroupManager:  POST /external/group/join (id + join code)
+GroupManager->>-ApiGateway: OK (group data)
+ApiGateway->>-Client: OK (group data)
 ```
