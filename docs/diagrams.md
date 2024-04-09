@@ -222,5 +222,37 @@ AlignmentConnector->>+ PaymentManager: GET /internal/balance/{group_id} (id)
 PaymentManager->>- AlignmentConnector: OK (balance of group members)
 AlignmentConnector->>- ApiGateway: OK (balance of group members)
 ApiGateway->>-Client: OK (balance of group members)
+```
 
+## Currency Manager
+
+``` mermaid
+ sequenceDiagram
+
+Client->>+ApiGateway: GET /external/currency (token)
+ApiGateway->>+CurrencyManager:  GET /external/currency
+CurrencyManager->>-ApiGateway: OK (available currencies)
+ApiGateway->>-Client: OK (available currencies)
+
+Client->>+ApiGateway: GET /external/exchange-rate (token + currencyFrom,currencyTo)
+ApiGateway->>+CurrencyManager:  GET /external/exchange-rate (currencyFrom,currencyTo)
+CurrencyManager->>+ ExchangeRateProvider: GET /exchangeRateProvider (currencyFrom,currencyTo)
+ExchangeRateProvider->>-CurrencyManager: OK (exchange rate)
+CurrencyManager->>-ApiGateway: OK (exchange rate)
+ApiGateway->>-Client: OK (exchange rate)
+```
+
+## Report Creator
+
+``` mermaid
+sequenceDiagram
+
+Client->>+ApiGateway: GET /external/repot/{group_id} (token + type(csv / pdf))
+ApiGateway->>+ReportCreator: GET /external/report/{group_id} (id + type(csf / pdf)))
+ReportCreator->>+ ExpenseManager: GET /internal/expense/{group_id} (id)
+ExpenseManager->>- ReportCreator: OK (expense data)
+ReportCreator->>+ PaymentManager: GET /internal/payment/{group_id}(id)
+PaymentManager->>- ReportCreator: OK (payment data)
+ReportCreator->>- ApiGateway: OK (report(csv/pdf))
+ApiGateway->>-Client: OK (report(csv/pdf))
 ```
