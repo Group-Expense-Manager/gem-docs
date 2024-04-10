@@ -31,7 +31,7 @@ ApiGateway->>-Client: OK
 
 Client->>+ApiGateway: POST /open/recover-password (email address)
 ApiGateway->>+Authenticator: POST /open/recover-password (email address)
-Authenticator->>+EmailSender: POST /internal/verification (email address + link)
+Authenticator->>+EmailSender: POST /internal/recover (email address + link)
 EmailSender->>EmailClient: EMAIL
 EmailSender->>-Authenticator: OK
 Authenticator->>-ApiGateway: OK
