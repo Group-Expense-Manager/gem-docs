@@ -41,3 +41,6 @@
 * Implementacja serwisu autentykacyjnego
 * Tworzenie diagramów uml dla każdego serwisu
 * Zapisanie się na konsultacje u opiekuna w celu przedstawienia szkicu pierwszego rozdziału pracy inżynierskiej
+### 08.04.2024 - 14.04.2024
+* Tworzenie diagramów uml dla każdego serwisu
+* Konsultacje z opiekunem z przedstawieniem pierwszego rozdziału pracy inżynierskiej
