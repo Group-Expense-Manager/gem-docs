@@ -295,12 +295,21 @@ ApiGateway->>-Client: OK (exchange rate)
 ``` mermaid
 sequenceDiagram
 
-Client->>+ApiGateway: GET /external/repot/{group_id} (token + type(csv / pdf))
-ApiGateway->>+ReportCreator: GET /external/report/{group_id} (id + type(csf / pdf)))
+Client->>+ApiGateway: GET /external/report-pdf/{group_id} (token)
+ApiGateway->>+ReportCreator: GET /external/report-pdf/{group_id} (id)
 ReportCreator->>+ ExpenseManager: GET /internal/expense/{group_id} (id)
 ExpenseManager->>- ReportCreator: OK (expense data)
 ReportCreator->>+ PaymentManager: GET /internal/payment/{group_id}(id)
 PaymentManager->>- ReportCreator: OK (payment data)
-ReportCreator->>- ApiGateway: OK (report(csv/pdf))
-ApiGateway->>-Client: OK (report(csv/pdf))
+ReportCreator->>- ApiGateway: OK (report pdf)
+ApiGateway->>-Client: OK (report pdf)
+
+Client->>+ApiGateway: GET /external/report-csv/{group_id} (token)
+ApiGateway->>+ReportCreator: GET /external/report-csv/{group_id} (id)
+ReportCreator->>+ ExpenseManager: GET /internal/expense/{group_id} (id)
+ExpenseManager->>- ReportCreator: OK (expense data)
+ReportCreator->>+ PaymentManager: GET /internal/payment/{group_id}(id)
+PaymentManager->>- ReportCreator: OK (payment data)
+ReportCreator->>- ApiGateway: OK (report csv)
+ApiGateway->>-Client: OK (report csv)
 ```
