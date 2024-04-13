@@ -40,7 +40,9 @@
 ### 01.04.2024 - 07.04.2024
 * Implementacja serwisu autentykacyjnego
 * Tworzenie diagramów uml dla każdego serwisu
-* Zapisanie się na konsultacje u opiekuna w celu przedstawienia szkicu pierwszego rozdziału pracy inżynierskiej
+* Stworzenie biblioteki do wszystkich serwisów
+* Dodanie analizatora kodu do schematu serwisu
 ### 08.04.2024 - 14.04.2024
 * Tworzenie diagramów uml dla każdego serwisu
 * Konsultacje z opiekunem z przedstawieniem pierwszego rozdziału pracy inżynierskiej
+* Konsultacje z pracowni projektowej 
