@@ -104,23 +104,43 @@ ApiGateway->>-Client: OK
 ``` mermaid
 sequenceDiagram
 
-Client->>+ApiGateway: PUT /external/user-details (token + username,firstname,lastname,pfp?)
-ApiGateway->>+Authenticator: PUT /external/user-details (id + username,firstname,lastname,pfp?)
-Authenticator->>-ApiGateway: OK
+Client->>+ApiGateway: PUT /external/user-details (token + username,firstname,lastname,pfp)
+ApiGateway->>+UserDetailsManager: PUT /external/user-details (id + username,firstname,lastname,pfp)
+
+alt adding new pfp
+    UserDetailsManager->>+ImageStore: POST /internal/image (pfp)
+    ImageStore->>-UserDetailsManager: CREATED (image_id)
+else changing pfp
+    UserDetailsManager->>+ImageStore: PUT /internal/image/{image_id} (pfp)
+    ImageStore->>-UserDetailsManager: OK
+
+else removing pfp
+    UserDetailsManager->>+ImageStore: DELETE /internal/image/{image_id}  (pfp)
+    ImageStore->>-UserDetailsManager: OK
+end
+UserDetailsManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 
 Client->>+ApiGateway: GET /external/user-details (token)
-ApiGateway->>+Authenticator: GET /external/user-details (id)
-Authenticator->>-ApiGateway: OK
+ApiGateway->>+UserDetailsManager: GET /external/user-details (id)
+alt pfp photo is present
+UserDetailsManager->>+ImageStore: GET /internal/image/{image_id} 
+ImageStore->>-UserDetailsManager: OK (image)
+end
+UserDetailsManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 
 Client->>+ApiGateway: GET /external/user-details/{group_id} (token)
-ApiGateway->>+Authenticator: GET /external/user-details/{group_id} (id)
-Authenticator->>+ GroupManager: /internal/group/{group_id}/ids
-GroupManager->>- Authenticator: OK
-Authenticator->>+ GroupManager: /internal/group?user_id=val
-GroupManager->>- Authenticator: OK
-Authenticator->>-ApiGateway: OK
+ApiGateway->>+UserDetailsManager: GET /external/user-details/{group_id} (id)
+UserDetailsManager->>+ GroupManager: /internal/group?user_id=val
+GroupManager->>- UserDetailsManager: OK
+UserDetailsManager->>+ GroupManager: /internal/group/{group_id}/ids
+GroupManager->>- UserDetailsManager: OK
+loop for each group member with pfp
+UserDetailsManager->>+ImageStore: GET /internal/image/{image_id} 
+ImageStore->>-UserDetailsManager: OK (image)
+end
+UserDetailsManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 ```
 
@@ -168,6 +188,10 @@ Client->>+ApiGateway: POST /external/expense/{group_id} (token + expense data)
 ApiGateway->>+ExpenseManager: POST /external/expense/{group_id} (id + expense data)
 ExpenseManager->>+GroupManager: GET /internal/group/{group_id}
 GroupManager->>-ExpenseManager: OK (group data)
+alt adding receipt photo
+    ExpenseManager->>+ImageStore: POST /internal/image (receipt photo)
+    ImageStore->>-ExpenseManager: CREATED (image_id)
+end
 ExpenseManager->>-ApiGateway: CREATED
 ApiGateway->>-Client: CREATED
 
@@ -176,11 +200,25 @@ Client->>+ApiGateway: PUT /external/expense/{group_id}/{expense_id} (token + upd
 ApiGateway->>+ExpenseManager: PUT /external/expense/{group_id}/{expense_id} (id + updated expense data)
 ExpenseManager->>+GroupManager: GET /internal/group/{group_id}
 GroupManager->>-ExpenseManager: OK (group data)
+alt adding new recipt photo
+    ExpenseManager->>+ImageStore: POST /internal/image (receipt photo)
+    ImageStore->>-ExpenseManager: CREATED (image_id)
+else changing recipt photo
+    ExpenseManager->>+ImageStore: PUT /internal/image/{image_id} (receipt photo)
+    ImageStore->>-ExpenseManager: OK
+else removing recipt photo
+    ExpenseManager->>+ImageStore: DELETE /internal/image/{image_id}  (receipt photo)
+    ImageStore->>-ExpenseManager: OK
+end
 ExpenseManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 
 Client->>+ApiGateway: DELETE /external/expense/{group_id}/{expense_id} (token)
 ApiGateway->>+ExpenseManager: DELETE /external/expense/{group_id}/{expense_id} (id)
+alt receipt photo is present    
+    ExpenseManager->>+ImageStore: DELETE /internal/image/{image_id}  (receipt photo)
+    ImageStore->>-ExpenseManager: OK
+end
 ExpenseManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 
@@ -194,6 +232,10 @@ ApiGateway->>-Client: OK + ids + names  + date + status
 
 Client->>+ApiGateway: GET /external/expense/{expense_id} (token)
 ApiGateway->>+ExpenseManager: GET /external/expense/{expense_id} (id)
+alt receipt photo is present 
+ExpenseManager->>+ImageStore: GET /internal/image/{image_id} 
+ImageStore->>-ExpenseManager: OK (image)
+end
 ExpenseManager->>-ApiGateway: OK + expense data
 ApiGateway->>-Client: OK + expense data
 
@@ -212,6 +254,10 @@ Client->>+ApiGateway: POST /external/payment/{group_id} (token + payment data)
 ApiGateway->>+PaymentManager: POST /external/payment/{group_id} (id + payment data)
 PaymentManager->>+GroupManager: GET /internal/group/{group_id}
 GroupManager->>-PaymentManager: OK (group data)
+alt adding bank transfer image
+    PaymentManager->>+ImageStore: POST /internal/image (bank transfer image)
+    ImageStore->>-PaymentManager: CREATED (image_id)
+end
 PaymentManager->>-ApiGateway: CREATED
 ApiGateway->>-Client: CREATED
 
@@ -219,6 +265,16 @@ Client->>+ApiGateway: PUT /external/payment/{group_id}/{payment_id} (token + upd
 ApiGateway->>+PaymentManager: PUT /external/payment/{group_id}/{payment_id} (id + updated payment data)
 PaymentManager->>+GroupManager: GET /internal/group/{group_id}
 GroupManager->>-PaymentManager: OK (group data)
+alt adding new bank transfer image
+    PaymentManager->>+ImageStore: POST /internal/image (bank transfer image)
+    ImageStore->>-PaymentManager: CREATED (image_id)
+else changing bank transfer image
+    PaymentManager->>+ImageStore: PUT /internal/image/{image_id} (bank transfer image)
+    ImageStore->>-PaymentManager: OK
+else removing bank transfer image
+    PaymentManager->>+ImageStore: DELETE /internal/image/{image_id}  (bank transfer image)
+    ImageStore->>-PaymentManager: OK
+end
 PaymentManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 
@@ -226,6 +282,10 @@ Client->>+ApiGateway: DELETE /external/payment/{group_id}/{payment_id} (token + 
 ApiGateway->>+PaymentManager: DELETE /external/payment/{group_id}/{payment_id} (id + updated payment data)
 PaymentManager->>+GroupManager: GET /internal/group?user_id=val
 GroupManager->>-PaymentManager: OK
+alt bank transfer image is present    
+    PaymentManager->>+ImageStore: DELETE /internal/image/{image_id}  (bank transfer image)
+    ImageStore->>-PaymentManager: OK
+end
 PaymentManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 
@@ -239,6 +299,10 @@ ApiGateway->>-Client: OK + ids + names + date + status
 
 Client->>+ApiGateway: GET /external/payment/{payment_id} (token + filters)
 ApiGateway->>+PaymentManager: GET /external/payment/{payment_id} (id + filters)
+alt bank transfer image is present 
+PaymentManager->>+ImageStore: GET /internal/image/{image_id} 
+ImageStore->>-PaymentManager: OK (image)
+end
 PaymentManager->>-ApiGateway: OK + payment data
 ApiGateway->>-Client: OK + payment data
 
