@@ -222,10 +222,8 @@ GroupManager->>-PaymentManager: OK (group data)
 PaymentManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 
-Client->>+ApiGateway: DELETE /external/payment/{group_id}/{payment_id} (token + updated payment data)
-ApiGateway->>+PaymentManager: DELETE /external/payment/{group_id}/{payment_id} (id + updated payment data)
-PaymentManager->>+GroupManager: GET /internal/group?user_id=val
-GroupManager->>-PaymentManager: OK
+Client->>+ApiGateway: DELETE /external/payment/{group_id}/{payment_id} (token)
+ApiGateway->>+PaymentManager: DELETE /external/payment/{group_id}/{payment_id} (id)
 PaymentManager->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 
@@ -314,7 +312,7 @@ ReportCreator->>- ApiGateway: OK (report csv)
 ApiGateway->>-Client: OK (report csv)
 ```
 
-## ImageStore
+## Image Store
 
 ``` mermaid
 sequenceDiagram
@@ -328,7 +326,7 @@ Client->>+ApiGateway: PUT /external/image/{image_id} (token + image)
 ApiGateway->>+ImageStore: PUT /external/image/{image_id} (id + image)
 ImageStore->>-ApiGateway: OK
 ApiGateway->>-Client: OK
-
+/home/pawel/Documents/thesis/service-template
 Client->>+ApiGateway: DELETE /external/image/{image_id} (token)
 ApiGateway->>+ImageStore: DELETE /external/image/{image_id} (id)
 ImageStore->>-ApiGateway: OK

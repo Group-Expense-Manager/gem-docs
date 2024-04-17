@@ -46,3 +46,7 @@
 * Tworzenie diagramów uml dla każdego serwisu
 * Konsultacje z opiekunem z przedstawieniem pierwszego rozdziału pracy inżynierskiej
 * Konsultacje z pracowni projektowej 
+### 15.04.2024 - 21.04.2024
+* Aktualizacja wireframów
+* Tworzenie tasków w jirze
+* Diagram komunikacji między-mikroserwisowej
