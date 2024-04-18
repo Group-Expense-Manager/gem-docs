@@ -1,0 +1,15 @@
+version: '3.5'
+
+services:
+  mkdocs:
+    image: squidfunk/mkdocs-material
+    restart: unless-stopped
+    stop_grace_period: 1s
+    ports:
+      - "127.0.0.1:82:8000"
+    volumes:
+      - ./:/docs:rw  # Mount the project directory as read-write
+      - mkdocs_cache:/docs/.cache  # Mount a volume for the cache directory
+
+volumes:
+  mkdocs_cache:
