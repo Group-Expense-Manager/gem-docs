@@ -1,8 +1,78 @@
 # Api Contracts
 
+## Authenticator
+
+``` mermaid
+classDiagram
+class NotVerifiedUser {
+    id: String
+    email: String
+    password: String
+    createdAt: Date
+    code: String
+    codeUpdatedAt: Date
+}
+
+class VerifiedUser {
+    id: String
+    email: String
+    password: String
+    passwordRecoveryCode: String
+    passwordRecoveryEmailSentAt: Date?
+}
+
+class Verification {
+    email: String
+    code: String
+}
+```
+
+``` mermaid
+sequenceDiagram
+
+    participant Client
+    participant Authenticator
+
+    Client->>Authenticator: Register POST open/register
+    Note over Client,Authenticator:Body: {<br>email: String <br> password: String<br>}
+    Authenticator->>Authenticator:Validate body
+    alt Body is Valid
+        Authenticator->>Authenticator:Check if email is not taken
+        alt Email is not taken
+            Authenticator->>Authenticator:Register user
+            Authenticator->>Client: 201 Created
+        else Email is taken
+            Authenticator->>Client: 409 Conflict
+        end
+    else Body is not Valid
+        Authenticator-->Client: 400 Bad Request
+    end
+
+    Client->>Authenticator: Login POST /open/login
+    Note over Client,Authenticator: Body: {<br>email: String <br> password: String<br>}
+    Authenticator->>Authenticator:Validate body
+    alt Body is Valid
+        Authenticator->>Authenticator:Authenticate
+        alt Successfully authenticated
+        Authenticator->>Authenticator:Create token
+        Authenticator->>Client: 200 OK
+        Note over Client,Authenticator: Body: token: String
+
+        else User is not verified
+            Authenticator-->Client: 403 Forbidden
+        else Bad credentials
+            Authenticator-->Client: 400 Bad Request
+        end
+
+    else Body is not Valid
+        Authenticator-->Client: 400 Bad Request
+    end
+
+```
+
 ## Image Store
 
-```mermaid
+``` mermaid
 
 classDiagram
     class UserAttachment {
@@ -35,7 +105,7 @@ classDiagram
     }
 ```
 
-```mermaid
+``` mermaid
 sequenceDiagram
     
     participant Client
