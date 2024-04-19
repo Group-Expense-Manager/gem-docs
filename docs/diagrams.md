@@ -295,24 +295,38 @@ sequenceDiagram
 
 Client->>+ApiGateway: GET /external/report-pdf/{group_id} (token)
 ApiGateway->>+ReportCreator: GET /external/report-pdf/{group_id} (id)
+alt report is cached
+ReportCreator->>+ AttachmentStore: GET /internal/group/{group_id}(id + report pdf)
+AttachmentStore->>- ReportCreator: OK + report
+else report is not cached
 ReportCreator->>+ ExpenseManager: GET /internal/expense/{group_id} (id)
 ExpenseManager->>- ReportCreator: OK (expense data)
 ReportCreator->>+ PaymentManager: GET /internal/payment/{group_id}(id)
 PaymentManager->>- ReportCreator: OK (payment data)
+ReportCreator->>+ AttachmentStore: POST /internal/group/{group_id}(id + report pdf)
+AttachmentStore->>- ReportCreator: CREATED
+end
 ReportCreator->>- ApiGateway: OK (report pdf)
 ApiGateway->>-Client: OK (report pdf)
 
 Client->>+ApiGateway: GET /external/report-csv/{group_id} (token)
 ApiGateway->>+ReportCreator: GET /external/report-csv/{group_id} (id)
+alt report is cached
+ReportCreator->>+ AttachmentStore: GET /internal/group/{group_id}(id + report csv)
+AttachmentStore->>- ReportCreator: OK + report
+else report is not cached
 ReportCreator->>+ ExpenseManager: GET /internal/expense/{group_id} (id)
 ExpenseManager->>- ReportCreator: OK (expense data)
 ReportCreator->>+ PaymentManager: GET /internal/payment/{group_id}(id)
 PaymentManager->>- ReportCreator: OK (payment data)
+ReportCreator->>+ AttachmentStore: POST /internal/group/{group_id}(id + report csv)
+AttachmentStore->>- ReportCreator: CREATED
+end
 ReportCreator->>- ApiGateway: OK (report csv)
 ApiGateway->>-Client: OK (report csv)
 ```
 
-## Image Store
+## Attachment Store
 
 ``` mermaid
 sequenceDiagram
