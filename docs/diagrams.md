@@ -260,14 +260,14 @@ PaymentManager->>- AlignmentConnector: OK (balance of user)
 AlignmentConnector->>- ApiGateway: OK (balance of user)
 ApiGateway->>-Client: OK (balance of user)
 
-Client->>+ApiGateway: GET /external/balance/{group_id} (token)
-ApiGateway->>+AlignmentConnector: GET /external/balance/{group_id} (id)
-AlignmentConnector->>+ ExpenseManager: GET /internal/balance/{group_id}/(id)
+Client->>+ApiGateway: GET /external/alignment/{group_id} (token)
+ApiGateway->>+AlignmentConnector: GET /external/alignment/{group_id} (id)
+AlignmentConnector->>+ ExpenseManager: GET /internal/balance/{group_id}/ (id)
 ExpenseManager->>- AlignmentConnector: OK (balance of group members)
 AlignmentConnector->>+ PaymentManager: GET /internal/balance/{group_id} (id)
 PaymentManager->>- AlignmentConnector: OK (balance of group members)
-AlignmentConnector->>- ApiGateway: OK (balance of group members)
-ApiGateway->>-Client: OK (balance of group members)
+AlignmentConnector->>- ApiGateway: OK (balance of group members & alignment)
+ApiGateway->>-Client: OK (balance of group members & alignment)
 ```
 
 ## Currency Manager
@@ -331,23 +331,34 @@ ApiGateway->>-Client: OK (report csv)
 ``` mermaid
 sequenceDiagram
 
-Client->>+ApiGateway: POST /external/image (token + image)
-ApiGateway->>+ImageStore: POST /external/image (id + image)
-ImageStore->>-ApiGateway: CREATED (image_id)
-ApiGateway->>-Client: CREATED (image_id)
+Client->>+ApiGateway: POST /external/attachments (token + attachment)
+ApiGateway->>+ImageStore: POST /external/attachments (id + attachment)
+ImageStore->>-ApiGateway: CREATED (attachment_id)
+ApiGateway->>-Client: CREATED (attachment_id)
 
-Client->>+ApiGateway: PUT /external/image/{image_id} (token + image)
-ApiGateway->>+ImageStore: PUT /external/image/{image_id} (id + image)
-ImageStore->>-ApiGateway: OK
-ApiGateway->>-Client: OK
-/home/pawel/Documents/thesis/service-template
-Client->>+ApiGateway: DELETE /external/image/{image_id} (token)
-ApiGateway->>+ImageStore: DELETE /external/image/{image_id} (id)
-ImageStore->>-ApiGateway: OK
-ApiGateway->>-Client: OK
+Client->>+ApiGateway: POST /external/attachments/groups/{group_id} (token + attachment)
+ApiGateway->>+ImageStore: POST /external/attachments/groups/{group_id} (id + attachment)
+ImageStore->>-ApiGateway: CREATED (attachment_id)
+ApiGateway->>-Client: CREATED (attachment_id)
 
-Client->>+ApiGateway: GET /external/image/{image_id} (token)
-ApiGateway->>+ImageStore: GET /external/image/{image_id} (id)
-ImageStore->>-ApiGateway: OK
-ApiGateway->>-Client: OK
+Client->>+ApiGateway: GET /external/attachments/{attachment_id} (token)
+ApiGateway->>+ImageStore: GET /external/attachments/{attachment_id}  (id)
+ImageStore->>-ApiGateway: OK (attachment)
+ApiGateway->>-Client: OK (attachment)
+
+Client->>+ApiGateway: GET /external/attachments/groups/{group_id}/{attachment_id} (token)
+ApiGateway->>+ImageStore: GET /external/attachments/groups/{group_id}/{attachment_id}  (id)
+ImageStore->>-ApiGateway: OK (attachment)
+ApiGateway->>-Client: OK (attachment)
+
+Client->>+ApiGateway: PUT /external/attachments/{attachmentId} (token + updated attachment)
+ApiGateway->>+ImageStore: PUT /external/attachments/{attachmentId} (id + updated attachment)
+ImageStore->>-ApiGateway: OK (attachment_id)
+ApiGateway->>-Client: OK (attachment_id)
+
+Client->>+ApiGateway: PUT /external/attachments/groups/{groupId}/{attachmentId} (token + updated attachment)
+ApiGateway->>+ImageStore: PUT /external/attachments/groups/{groupId}/{attachmentId} (id + updated attachment)
+ImageStore->>-ApiGateway: OK (attachment_id)
+ApiGateway->>-Client: OK (attachment_id)
+
 ```
