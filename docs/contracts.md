@@ -33,7 +33,7 @@ sequenceDiagram
     participant Client
     participant Authenticator
 
-    Client->>Authenticator: Register POST open/register
+    Client->>Authenticator: Register POST /open/register
     Note over Client,Authenticator:Body: {<br>email: String <br> password: String<br>}
     Authenticator->>Authenticator:Validate body
     alt Body is Valid
@@ -45,7 +45,7 @@ sequenceDiagram
             Authenticator->>Client: 409 Conflict
         end
     else Body is not Valid
-        Authenticator-->Client: 400 Bad Request
+        Authenticator->>Client: 400 Bad Request
     end
 
     Client->>Authenticator: Login POST /open/login
@@ -59,15 +59,111 @@ sequenceDiagram
         Note over Client,Authenticator: Body: token: String
 
         else User is not verified
-            Authenticator-->Client: 403 Forbidden
+            Authenticator->>Client: 403 Forbidden
         else Bad credentials
-            Authenticator-->Client: 400 Bad Request
+            Authenticator->>Client: 400 Bad Request
+        end
+    else Body is not Valid
+        Authenticator->>Client: 400 Bad Request
+    end
+    
+    Client->>Authenticator: Register POST /open/verify
+    Note over Client,Authenticator:Body: {<br>email: String <br> code: String<br>}
+    Authenticator->>Authenticator:Validate body
+    alt Body is Valid
+        Authenticator->>Authenticator: Check if not verified user exists
+        alt User exists
+            Authenticator->>Authenticator: Check code
+            alt Code is correct
+                Authenticator->>Authenticator: Verify user
+                Authenticator->>Client: 200 OK
+                Note over Client,Authenticator: Body: token: String
+            else Code is not correct
+                Authenticator->>Client: 400 Bad Request
+            end
+        else User does not exist
+        Authenticator->>Client: 404 Not found
         end
 
     else Body is not Valid
-        Authenticator-->Client: 400 Bad Request
+        Authenticator->>Client: 400 Bad Request
     end
 
+    Client->>Authenticator: Send verification email POST /open/send-verification-email
+    Note over Client,Authenticator:Body: {<br>email: String}
+    Authenticator->>Authenticator: Validate body
+    alt Body is Valid
+        Authenticator->>Authenticator: Check if not verified user exists
+        alt User exists
+            Authenticator->>Authenticator: Check if email was recently sent
+            alt Email wasn't recently sent
+                Authenticator->>Authenticator: Generate code & send verification email
+                Authenticator->>Client: 200 OK
+            else Email was recently sent
+                Authenticator->>Client: 429 Too many requests
+            end
+        else User does not exist
+            Authenticator->>Client: 404 Not found
+        end
+    else Body is not Valid
+        Authenticator->>Client: 400 Bad Request
+    end
+
+    Client->>Authenticator: Send password-recovery email POST /open/recover-password
+    Note over Client,Authenticator:Body: {<br>email: String}
+    Authenticator->>Authenticator: Validate body
+    alt Body is Valid
+        Authenticator->>Authenticator: Check if not verified user exists
+        alt User exists
+            Authenticator->>Authenticator: Check if email was recently sent
+            alt Email wasn't recently sent
+                Authenticator->>Authenticator: send password-recovery email
+                Authenticator->>Client: 200 OK
+            else Email was recently sent
+                Authenticator->>Client: 429 Too many requests
+            end
+        else User does not exist
+        Authenticator->>Client: 404 Not found
+        end
+    else Body is not Valid
+        Authenticator->>Client: 400 Bad Request
+    end
+
+    Client->>Authenticator: Send new password by email POST /open/send-password
+    Note over Client,Authenticator:RequestParams: {<br>email: String<br>code: String<br>}
+    Authenticator->>Authenticator: Check if not verified user exists
+    alt User exists
+        Authenticator->>Authenticator: Check code
+        alt Code is correct
+            Authenticator->>Authenticator: Generate & sende new password by email
+            Authenticator->>Client: 200 OK
+        else Code is not correct
+            Authenticator->>Client: 400 Bad Request
+        end
+    else User does not exist
+        Authenticator->>Client: 404 Not found
+    end
+
+    Client->>Authenticator: Change password POST /external/change-password
+    Note over Client,Authenticator:token-validated: TOKEN<br>Body: {<br>oldPassword: String<br>newPassword: String<br>}
+    Authenticator->>Authenticator: Validate body
+    alt Body is Valid
+        Authenticator->>Authenticator: Check if user exists
+        alt User exists
+            Authenticator->>Authenticator: Check if old password is correct
+            alt Password is correct
+                Authenticator->>Authenticator: Update password
+                Authenticator->>Client: 200 OK
+            else Password is not correct
+                Authenticator->>Client: 400 Bad Request
+            end
+
+        else User does not exist
+            Authenticator->>Client: 404 Not found
+        end
+    else Body is not Valid
+        Authenticator->>Client: 400 Bad Request
+    end
 ```
 
 ## Image Store
