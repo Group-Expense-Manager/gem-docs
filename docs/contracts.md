@@ -166,7 +166,34 @@ sequenceDiagram
     end
 ```
 
-## Image Store
+
+## Email Sender
+
+``` mermaid
+sequenceDiagram
+
+    participant Authenticator
+    participant EmailSender
+
+    Authenticator->>EmailSender: Send verification email POST /internal/verification
+    Note over Authenticator,EmailSender:Body: {<br>email: String <br> code: String<br>}
+    EmailSender->>EmailSender:Send verification email
+    EmailSender->>Authenticator: 200 OK
+
+    Authenticator->>EmailSender: Send password-recovery email POST /internal/password-recovery
+    Note over Authenticator,EmailSender:Body: {<br>email: String <br> link: String<br>}
+    EmailSender->>EmailSender:Send password-recovery email
+    EmailSender->>Authenticator: 200 OK
+
+
+    Authenticator->>EmailSender: Send new password by email POST /internal/password
+    Note over Authenticator,EmailSender:Body: {<br>email: String <br> password: String<br>}
+    EmailSender->>EmailSender:Send new password
+    EmailSender->>Authenticator: 200 OK
+    
+```
+
+## Attachment Store
 
 ``` mermaid
 
