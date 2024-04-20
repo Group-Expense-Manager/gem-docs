@@ -193,6 +193,63 @@ sequenceDiagram
     
 ```
 
+## User Details Manager
+
+``` mermaid
+classDiagram
+
+class UserDetails {
+    id: String
+    username: String
+    firstname: String?
+    lastname: String?
+    attachmentId: String?
+}
+
+```
+
+``` mermaid
+sequenceDiagram
+
+    participant Client
+    participant Authenticator
+    participant UserDetailsManager
+
+    Authenticator->>UserDetailsManager: Create user details POST /internal/user-details
+    Note over Authenticator,UserDetailsManager: token-validated: TOKEN<br>Body: {<br>email: String <br>}
+    UserDetailsManager->>UserDetailsManager: Create user details
+    UserDetailsManager->>Authenticator: 201 Created
+
+    Client->>UserDetailsManager: Change user details PUT /external/user-details
+    Note over Client,UserDetailsManager: token-validated: TOKEN<br> Body: {<br>username: String <br>firstname: String? <br>lastname: String? <br>attachmentId: String?<br>}
+    UserDetailsManager->>UserDetailsManager: Validate body
+    alt Body is valid
+        UserDetailsManager->>UserDetailsManager: Change user details
+        UserDetailsManager->>Client: 200 OK
+    else Body is not valid
+        UserDetailsManager->>Client: 400 Bad Request
+    end
+
+
+    Client->>UserDetailsManager: get user details GET /external/user-details
+    Note over Client,UserDetailsManager: token-validated: TOKEN
+    UserDetailsManager->>UserDetailsManager: Get user details
+    UserDetailsManager->>Client: 200 OK
+    Note over Client,UserDetailsManager:<br> Body: {<br>username: String <br>firstname: String? <br>lastname: String? <br>attachmentId: String?<br>}
+
+    Client->>UserDetailsManager: get user details of group members GET /external/user-details/{group_id}
+    Note over Client,UserDetailsManager: token-validated: TOKEN
+    UserDetailsManager->>UserDetailsManager: Check if user is a group member
+    alt User is a group member
+        UserDetailsManager->>UserDetailsManager: Get user details of group members
+        UserDetailsManager->>Client: 200 OK
+        Note over Client,UserDetailsManager:<br> Body: List{ {<br>username: String <br>firstname: String? <br>lastname: String? <br>attachmentId: String?<br>}}
+    else User is not a group member
+        UserDetailsManager->>Client: 403 Forbidden
+    end
+   
+```
+
 ## Attachment Store
 
 ``` mermaid
