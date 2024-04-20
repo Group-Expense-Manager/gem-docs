@@ -293,8 +293,8 @@ ApiGateway->>-Client: OK (exchange rate)
 ``` mermaid
 sequenceDiagram
 
-Client->>+ApiGateway: GET /external/report-pdf/{group_id} (token)
-ApiGateway->>+ReportCreator: GET /external/report-pdf/{group_id} (id)
+Client->>+ApiGateway: GET /external/report-pdf/{group_id}?dateFrom=val1&dateTo=val2 (token)
+ApiGateway->>+ReportCreator: GET /external/report-pdf/{group_id}?dateFrom=val1&dateTo=val2 (id)
 alt report is cached
 ReportCreator->>+ AttachmentStore: GET /internal/group/{group_id}(id + report pdf)
 AttachmentStore->>- ReportCreator: OK + report
@@ -309,8 +309,8 @@ end
 ReportCreator->>- ApiGateway: OK (report pdf)
 ApiGateway->>-Client: OK (report pdf)
 
-Client->>+ApiGateway: GET /external/report-csv/{group_id} (token)
-ApiGateway->>+ReportCreator: GET /external/report-csv/{group_id} (id)
+Client->>+ApiGateway: GET /external/report-csv/{group_id}?dateFrom=val1&dateTo=val2 (token)
+ApiGateway->>+ReportCreator: GET /external/report-csv/{group_id}?dateFrom=val1&dateTo=val2 (id)
 alt report is cached
 ReportCreator->>+ AttachmentStore: GET /internal/group/{group_id}(id + report csv)
 AttachmentStore->>- ReportCreator: OK + report
