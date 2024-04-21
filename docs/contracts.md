@@ -2,7 +2,7 @@
 
 ## Authenticator
 
-``` mermaid
+```mermaid
 classDiagram
 class NotVerifiedUser {
     id: String
@@ -27,7 +27,7 @@ class Verification {
 }
 ```
 
-``` mermaid
+```mermaid
 sequenceDiagram
 
     participant Client
@@ -169,7 +169,7 @@ sequenceDiagram
 
 ## Email Sender
 
-``` mermaid
+```mermaid
 sequenceDiagram
 
     participant Authenticator
@@ -195,7 +195,7 @@ sequenceDiagram
 
 ## User Details Manager
 
-``` mermaid
+```mermaid
 classDiagram
 
 class UserDetails {
@@ -208,7 +208,7 @@ class UserDetails {
 
 ```
 
-``` mermaid
+```mermaid
 sequenceDiagram
 
     participant Client
@@ -252,7 +252,7 @@ sequenceDiagram
 
 ## Attachment Store
 
-``` mermaid
+```mermaid
 
 classDiagram
     class UserAttachment {
@@ -285,7 +285,8 @@ classDiagram
     }
 ```
 
-``` mermaid
+```mermaid
+
 sequenceDiagram
     
     participant Client
