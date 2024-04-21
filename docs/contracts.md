@@ -1,37 +1,37 @@
 # Api Contracts
 
-## Image Store
+## Attachment-Store
 
 ```mermaid
 
 classDiagram
     class UserAttachment {
     _id: ObjectId
-    userId: string
-    contentType: string
-    size: number
+    userId: String
+    contentType: String
+    size: Number
     data: BSON
     createdAt: Date
     updatedAt: Date
-    attachmentHistory: AttachmentHistory
+    attachmentHistory: AttachmentHistory[]
     }
   
     class GroupAttachment {
         _id: ObjectId
-        groupId: string
-        uploadedByUser: string
-        contentType: string
-        size: number
+        groupId: String
+        uploadedByUser: String
+        contentType: String
+        size: Number
         data: BSON
         createdAt: Date
         updatedAt: Date
-        attachmentHistory: AttachmentHistory
+        attachmentHistory: AttachmentHistory[]
     }
     
     class AttachmentHistory {
-        updateBy: string
+        updateBy: String
         updatedAt: Date
-        size: number
+        size: Number
     }
 ```
 
@@ -59,7 +59,7 @@ sequenceDiagram
         AttachmentStore->>Client: 415 Unsupported Media Type
     end
 
-    Client->>AttachmentStore: Upload Attachment POST external/attachments/group/{groupId}
+    Client->>AttachmentStore: Upload Attachment POST external/attachments/groups/{groupId}
     Note over Client,AttachmentStore: token-validated:TOKEN<br>Body:ByteArray
     activate AttachmentStore
     AttachmentStore->>AttachmentStore: Check access to group for that user
