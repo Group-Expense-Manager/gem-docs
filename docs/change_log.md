@@ -50,3 +50,6 @@
 * Aktualizacja wireframów
 * Tworzenie tasków w jirze
 * Diagram komunikacji między-mikroserwisowej
+* ### 22.04.2024 - 28.04.2024
+* Tworzenie kontraktu dla każdego mikroserwisu
+* 

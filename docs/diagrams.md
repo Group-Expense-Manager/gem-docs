@@ -290,75 +290,92 @@ ApiGateway->>-Client: OK (exchange rate)
 
 ## Report Creator
 
-``` mermaid
+```mermaid
 sequenceDiagram
 
-Client->>+ApiGateway: GET /external/report-pdf/{group_id}?dateFrom=val1&dateTo=val2 (token)
-ApiGateway->>+ReportCreator: GET /external/report-pdf/{group_id}?dateFrom=val1&dateTo=val2 (id)
-alt report is cached
-ReportCreator->>+ AttachmentStore: GET /internal/group/{group_id}(id + report pdf)
-AttachmentStore->>- ReportCreator: OK + report
-else report is not cached
+Client->>+ApiGateway: POST /external/generate/{group_id} (token)
+ApiGateway->>+ReportCreator: POST /external/generate/{group_id} (id)
+ReportCreator->>+GroupManager: GET /internal/group?user_id=val
+GroupManager->>-ReportCreator: OK
 ReportCreator->>+ ExpenseManager: GET /internal/expense/{group_id} (id)
 ExpenseManager->>- ReportCreator: OK (expense data)
-ReportCreator->>+ PaymentManager: GET /internal/payment/{group_id}(id)
+ReportCreator->>+ PaymentManager: GET /internal/payment/{group_id} (id)
 PaymentManager->>- ReportCreator: OK (payment data)
-ReportCreator->>+ AttachmentStore: POST /internal/group/{group_id}(id + report pdf)
-AttachmentStore->>- ReportCreator: CREATED
-end
-ReportCreator->>- ApiGateway: OK (report pdf)
-ApiGateway->>-Client: OK (report pdf)
+ReportCreator->>+AttachmentStore:  POST /internal/attachments/groups/{group_id} (id + pdf attachment)
+AttachmentStore->>-ReportCreator: CREATED (attachment_id)
+ReportCreator->>+AttachmentStore:  POST /internal/attachments/groups/{group_id} (id + csv attachment)
+AttachmentStore->>-ReportCreator: CREATED (attachment_id)
+ReportCreator->>-ApiGateway: CREATED
+ApiGateway->>-Client: CREATED
 
-Client->>+ApiGateway: GET /external/report-csv/{group_id}?dateFrom=val1&dateTo=val2 (token)
-ApiGateway->>+ReportCreator: GET /external/report-csv/{group_id}?dateFrom=val1&dateTo=val2 (id)
-alt report is cached
-ReportCreator->>+ AttachmentStore: GET /internal/group/{group_id}(id + report csv)
-AttachmentStore->>- ReportCreator: OK + report
-else report is not cached
-ReportCreator->>+ ExpenseManager: GET /internal/expense/{group_id} (id)
-ExpenseManager->>- ReportCreator: OK (expense data)
-ReportCreator->>+ PaymentManager: GET /internal/payment/{group_id}(id)
-PaymentManager->>- ReportCreator: OK (payment data)
-ReportCreator->>+ AttachmentStore: POST /internal/group/{group_id}(id + report csv)
-AttachmentStore->>- ReportCreator: CREATED
-end
-ReportCreator->>- ApiGateway: OK (report csv)
-ApiGateway->>-Client: OK (report csv)
+Client->>+ApiGateway: GET /external/reports/{group_id} (token)
+ApiGateway->>+ReportCreator: GET /external/reports/{group_id}(id)
+ReportCreator->>+GroupManager: GET /internal/group?user_id=val
+GroupManager->>-ReportCreator: OK
+ReportCreator->>-ApiGateway: OK (list of report ids, names, date of creation)
+ApiGateway->>-Client: OK (list of report ids, names, date of creation)
+
+Client->>+ApiGateway: GET /external/send-report/{group_id}/{report_id} (token + report_type)
+ApiGateway->>+ReportCreator: GET /external/send-report/{group_id}/{report_id} (id + report_type)
+ReportCreator->>+GroupManager: GET /internal/group?user_id=val
+GroupManager->>-ReportCreator: OK
+ReportCreator->>+AttachmentStore: GET /internal/attachments/groups/{group_id}/{attachment_id}  (id)
+AttachmentStore->>-ReportCreator: OK (attachment)
+ReportCreator->>+EmailSender: POST /internal/report (email, report)
+EmailSender->>-ReportCreator: OK
+ReportCreator->>-ApiGateway: OK (list of report ids, names, date of creation)
+ApiGateway->>-Client: OK (list of report ids, names, date of creation)
+
+Client->>+ApiGateway: GET /external/download-pdf-report/{group_id}/{report_id} (token)
+ApiGateway->>+ReportCreator: GET /external/download-pdf-report/{group_id}/{report_id} (id)
+ReportCreator->>+GroupManager: GET /internal/group?user_id=val
+GroupManager->>-ReportCreator: OK
+ReportCreator->>+AttachmentStore: GET /internal/attachments/groups/{group_id}/{attachment_id}  (id)
+AttachmentStore->>-ReportCreator: OK (attachment)
+ReportCreator->>+ApiGateway: OK (pdf)
+
+Client->>+ApiGateway: GET /external/download-csv-report/{group_id}/{report_id} (token)
+ApiGateway->>+ReportCreator: GET /external/download-csv-report/{group_id}/{report_id} (id)
+ReportCreator->>+GroupManager: GET /internal/group?user_id=val 
+GroupManager->>-ReportCreator: OK
+ReportCreator->>+AttachmentStore: GET /internal/attachments/groups/{group_id}/{attachment_id}  (id)
+AttachmentStore->>-ReportCreator: OK (attachment)
+ReportCreator->>+ApiGateway: OK (csv)
 ```
 
 ## Attachment Store
 
-``` mermaid
+```mermaid
 sequenceDiagram
 
 Client->>+ApiGateway: POST /external/attachments (token + attachment)
-ApiGateway->>+ImageStore: POST /external/attachments (id + attachment)
-ImageStore->>-ApiGateway: CREATED (attachment_id)
+ApiGateway->>+AttachmentStore: POST /external/attachments (id + attachment)
+AttachmentStore->>-ApiGateway: CREATED (attachment_id)
 ApiGateway->>-Client: CREATED (attachment_id)
 
 Client->>+ApiGateway: POST /external/attachments/groups/{group_id} (token + attachment)
-ApiGateway->>+ImageStore: POST /external/attachments/groups/{group_id} (id + attachment)
-ImageStore->>-ApiGateway: CREATED (attachment_id)
+ApiGateway->>+AttachmentStore: POST /external/attachments/groups/{group_id} (id + attachment)
+AttachmentStore->>-ApiGateway: CREATED (attachment_id)
 ApiGateway->>-Client: CREATED (attachment_id)
 
 Client->>+ApiGateway: GET /external/attachments/{attachment_id} (token)
-ApiGateway->>+ImageStore: GET /external/attachments/{attachment_id}  (id)
-ImageStore->>-ApiGateway: OK (attachment)
+ApiGateway->>+AttachmentStore: GET /external/attachments/{attachment_id}  (id)
+AttachmentStore->>-ApiGateway: OK (attachment)
 ApiGateway->>-Client: OK (attachment)
 
 Client->>+ApiGateway: GET /external/attachments/groups/{group_id}/{attachment_id} (token)
-ApiGateway->>+ImageStore: GET /external/attachments/groups/{group_id}/{attachment_id}  (id)
-ImageStore->>-ApiGateway: OK (attachment)
+ApiGateway->>+AttachmentStore: GET /external/attachments/groups/{group_id}/{attachment_id}  (id)
+AttachmentStore->>-ApiGateway: OK (attachment)
 ApiGateway->>-Client: OK (attachment)
 
 Client->>+ApiGateway: PUT /external/attachments/{attachmentId} (token + updated attachment)
-ApiGateway->>+ImageStore: PUT /external/attachments/{attachmentId} (id + updated attachment)
-ImageStore->>-ApiGateway: OK (attachment_id)
+ApiGateway->>+AttachmentStore: PUT /external/attachments/{attachmentId} (id + updated attachment)
+AttachmentStore->>-ApiGateway: OK (attachment_id)
 ApiGateway->>-Client: OK (attachment_id)
 
 Client->>+ApiGateway: PUT /external/attachments/groups/{groupId}/{attachmentId} (token + updated attachment)
-ApiGateway->>+ImageStore: PUT /external/attachments/groups/{groupId}/{attachmentId} (id + updated attachment)
-ImageStore->>-ApiGateway: OK (attachment_id)
+ApiGateway->>+AttachmentStore: PUT /external/attachments/groups/{groupId}/{attachmentId} (id + updated attachment)
+AttachmentStore->>-ApiGateway: OK (attachment_id)
 ApiGateway->>-Client: OK (attachment_id)
 
 ```
