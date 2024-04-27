@@ -46,83 +46,66 @@ sequenceDiagram
 
     Client->>Authenticator: Login POST /open/login
     Note over Client,Authenticator: Body: {<br>email: String <br> password: String<br>}
-    Authenticator->>Authenticator:Validate body
-    alt Body is Valid
-        Authenticator->>Authenticator:Authenticate
-        alt Successfully authenticated
-        Authenticator->>Authenticator:Create token
-        Authenticator->>Client: 200 OK
-        Note over Client,Authenticator: Body: token: String
+    Authenticator->>Authenticator:Authenticate
+    alt Successfully authenticated
+    Authenticator->>Authenticator:Create token
+    Authenticator->>Client: 200 OK
+    Note over Client,Authenticator: Body: token: String
 
-        else User is not verified
-            Authenticator->>Client: 403 Forbidden
-        else Bad credentials
-            Authenticator->>Client: 403 Forbidden
-        end
-    else Body is not Valid
-        Authenticator->>Client: 400 Bad Request
+    else User is not verified
+        Authenticator->>Client: 403 Forbidden
+    else Bad credentials
+        Authenticator->>Client: 403 Forbidden
     end
+
     
     Client->>Authenticator: Verify user POST /open/verify
     Note over Client,Authenticator:Body: {<br>email: String <br> code: String<br>}
-    Authenticator->>Authenticator:Validate body
-    alt Body is Valid
-        Authenticator->>Authenticator: Check if not verified user exists
-        alt User exists
-            Authenticator->>Authenticator: Check code
-            alt Code is correct
-                Authenticator->>Authenticator: Verify user
-                Authenticator->>Client: 200 OK
-                Note over Client,Authenticator: Body: token: String
-            else Code is not correct
-                Authenticator->>Client: 400 Bad Request
-            end
-        else User does not exist
-        Authenticator->>Client: 404 Not found
+    Authenticator->>Authenticator: Check if not verified user exists
+    alt User exists
+        Authenticator->>Authenticator: Check code
+        alt Code is correct
+            Authenticator->>Authenticator: Verify user
+            Authenticator->>Client: 200 OK
+            Note over Client,Authenticator: Body: token: String
+        else Code is not correct
+            Authenticator->>Client: 400 Bad Request
         end
-
-    else Body is not Valid
-        Authenticator->>Client: 400 Bad Request
+    else User does not exist
+    Authenticator->>Client: 404 Not found
     end
 
     Client->>Authenticator: Send verification email POST /open/send-verification-email
     Note over Client,Authenticator:Body: {<br>email: String<br>}
-    Authenticator->>Authenticator: Validate body
-    alt Body is Valid
-        Authenticator->>Authenticator: Check if not verified user exists
-        alt User exists
-            Authenticator->>Authenticator: Check if email was recently sent
-            alt Email wasn't recently sent
-                Authenticator->>Authenticator: Generate code & send verification email
-                Authenticator->>Client: 200 OK
-            else Email was recently sent
-                Authenticator->>Client: 429 Too many requests
-            end
-        else User does not exist
-            Authenticator->>Client: 404 Not found
+    Authenticator->>Authenticator: Check if not verified user exists
+    alt User exists
+        Authenticator->>Authenticator: Check if email was recently sent
+        alt Email wasn't recently sent
+            Authenticator->>Authenticator: Generate code & send verification email
+            Authenticator->>Client: 200 OK
+        else Email was recently sent
+            Authenticator->>Client: 429 Too many requests
         end
-    else Body is not Valid
-        Authenticator->>Client: 400 Bad Request
+    else User does not exist
+        Authenticator->>Client: 404 Not found
     end
+  
+  
+  
 
     Client->>Authenticator: Send password-recovery email POST /open/recover-password
     Note over Client,Authenticator:Body: {<br>email: String<br>}
-    Authenticator->>Authenticator: Validate body
-    alt Body is Valid
-        Authenticator->>Authenticator: Check if verified user exists
-        alt User exists
-            Authenticator->>Authenticator: Check if email was recently sent
-            alt Email wasn't recently sent
-                Authenticator->>Authenticator: send password-recovery email
-                Authenticator->>Client: 200 OK
-            else Email was recently sent
-                Authenticator->>Client: 429 Too many requests
-            end
-        else User does not exist
-        Authenticator->>Client: 404 Not found
+    Authenticator->>Authenticator: Check if verified user exists
+    alt User exists
+        Authenticator->>Authenticator: Check if email was recently sent
+        alt Email wasn't recently sent
+            Authenticator->>Authenticator: send password-recovery email
+            Authenticator->>Client: 200 OK
+        else Email was recently sent
+            Authenticator->>Client: 429 Too many requests
         end
-    else Body is not Valid
-        Authenticator->>Client: 400 Bad Request
+    else User does not exist
+    Authenticator->>Client: 404 Not found
     end
 
     Client->>Authenticator: Send new password by email POST /open/send-password
@@ -188,9 +171,14 @@ sequenceDiagram
     EmailSender->>Client: 200 OK
     
     Client->>EmailSender: Send report POST /internal/report
-    Note over Client,EmailSender:Body: {<br>email: String <br> report: File<br>}
-    EmailSender->>EmailSender:Send report
-    EmailSender->>Client: 200 OK
+    Note over Client,EmailSender:Body: {<br>email: String <br> attachmentId: String<br>}
+    EmailSender->>EmailSender: Download report from Attachment Store
+    alt Report downloaded successfully
+        EmailSender->>EmailSender:  send mail with report
+        EmailSender->>Client: 200 OK
+    else Failed to download report
+        EmailSender->>Client: 400 Bad Request
+    end
     
 ```
 
@@ -243,7 +231,7 @@ sequenceDiagram
     alt User is a group member
         UserDetailsManager->>UserDetailsManager: Get user details of group members
         UserDetailsManager->>Client: 200 OK
-        Note over Client,UserDetailsManager:<br> Body: List{ {<br>username: String <br>firstname: String? <br>lastname: String? <br>attachmentId: String?<br>}}
+        Note over Client,UserDetailsManager:<br> Body: {<br> userDetails: UserDetails[] <br>}
     else User is not a group member
         UserDetailsManager->>Client: 403 Forbidden
     end
@@ -262,7 +250,7 @@ classDiagram
         members: String[]
         multiCurrency: Boolean
         acceptRequired: Boolean
-        currencies: String[]
+        currency: String?
         joinCode: String
         attachmentId: String
         
@@ -274,24 +262,24 @@ sequenceDiagram
     participant Client
     participant GroupManager
     
-    Client->>GroupManager: Create group POST /external/group
-    Note over Client,GroupManager:token-validated: TOKEN<br> Body: {<br>name: String<br> colour: Number<br>multiCurrency: Boolean <br> acceptRequired: Boolean <br> currencies: String[] <br> }<br>
+    Client->>GroupManager: Create group POST /external/groups
+    Note over Client,GroupManager:token-validated: TOKEN<br> Body: {<br>name: String<br> colour: Number<br>multiCurrency: Boolean <br> acceptRequired: Boolean <br> currency: String? <br> attachmentId: String <br>}<br>
     GroupManager->>GroupManager:validate Body
     alt Body is valid
-        GroupManager->>GroupManager: Check if currencies are available
-        alt Currencies are available
+        GroupManager->>GroupManager: Check if currency is available
+        alt Currency is available
             GroupManager->>GroupManager: Create group
             GroupManager->>Client: 201 Created
             Note over GroupManager,Client: Body: {<br>groupId: String,<br>}
 
-        else Currencie are not available
+        else Currency is not available
             GroupManager->>Client: 400 Bad Request
         end
     else Body is not valid
         GroupManager->>Client: 400 Bad Request
     end
     
-    Client->>GroupManager: Delete group DELETE /external/group/{group_id}
+    Client->>GroupManager: Delete group DELETE /external/groups/{group_id}
     Note over Client,GroupManager:token-validated: TOKEN
     GroupManager->>GroupManager: Check if user is owner of the group
     alt User is owner of the group
@@ -300,38 +288,24 @@ sequenceDiagram
             GroupManager->>GroupManager: Delete group
             GroupManager->>Client: 200 OK
         else group balance != 0
-            GroupManager->>Client: 409 Conflict
+            GroupManager->>Client: 422 Unprocessable Content
         end
     else User is not owner of the group
         GroupManager->>Client: 403 Forbidden
     end
 
-    Client->>GroupManager: Edit group PUT /external/group/{group_id}
+    Client->>GroupManager: Edit group PUT /external/groups/{group_id}
     Note over Client,GroupManager:token-validated: TOKEN<br> Body: {<br>name: String<br> colour: Number<br> }<br>
-    GroupManager->>GroupManager:validate Body
-    alt Body is valid
-        GroupManager->>GroupManager: Check if user is owner of the group
-        alt User is owner of the group
-            GroupManager->>GroupManager: Edit group data
-            GroupManager->>Client: 200 OK
-        else User is not owner of the group
-            GroupManager->>Client: 403 Forbidden
-        end
-    else Body is not valid
-        GroupManager->>Client: 400 Bad Request
-    end
-    
-    Client->>GroupManager: Get group data GET /external/group/{group_id}
-    Note over Client,GroupManager:token-validated: TOKEN
-    GroupManager->>GroupManager: Check if user is a group member
-    alt User is a group member
-        GroupManager->>GroupManager: Get group data
+
+    GroupManager->>GroupManager: Check if user is owner of the group
+    alt User is owner of the group
+        GroupManager->>GroupManager: Edit group data
         GroupManager->>Client: 200 OK
-        Note over GroupManager,Client:Body: {<br>name: String<br> colour: Number<br> owner: String <br> members: String[]<br>multiCurrency: Boolean <br> acceptRequired: Boolean <br> currencies: String[] <br> joinCode:String <br> attachmentId: String<br>}<br>
-    else User is not a group member
+    else User is not owner of the group
         GroupManager->>Client: 403 Forbidden
     end
 
+    
     Client->>GroupManager: Get group data GET /external/groups/{group_id}
     Note over Client,GroupManager:token-validated: TOKEN
     GroupManager->>GroupManager: Check if user is a group member
@@ -347,45 +321,178 @@ sequenceDiagram
     Note over Client,GroupManager:token-validated: TOKEN
     GroupManager->>GroupManager: Get user's groups basic data
     GroupManager->>Client: 200 OK
-    Note over GroupManager,Client:Body: List[{<br> id: String<br>name: String<br> colour: Number<br> attachmentId: String<br>}]<br>
+    Note over GroupManager,Client:Body: {<br> userGroupsBasicData: UserGroupsBasicData <br>}
 
     Client->>GroupManager: Get user's groups ids GET /internal/groups?user_id=val
     GroupManager->>GroupManager: Get user's groups id
     GroupManager->>Client: 200 OK
-    Note over GroupManager,Client:Body: List[{<br> id: String<br>}]<br>
+    Note over GroupManager,Client:Body: { <br> groupIds: GroupIds<br> }
 
     Client->>GroupManager: GET members ids GET /internal/members/{group_id}
     GroupManager->>GroupManager: Get members ids
     GroupManager->>Client: 200 OK
-    Note over GroupManager,Client:Body: List[{<br> user_id: String<br>}]<br>
+    Note over GroupManager,Client:Body: {<br> memberIds: MemberIds<br>}
 
-    Client->>GroupManager: Get group data GET /internal/group/{group_id}
+    Client->>GroupManager: Get group data GET /internal/groups/{group_id}
     GroupManager->>GroupManager: Get group data
     GroupManager->>Client: 200 OK
-    Note over GroupManager,Client:Body: {<br>members: String[]<br>multiCurrency: Boolean <br> acceptRequired: Boolean <br> currencies: String[]<br>}<br>
-
-
+    Note over GroupManager,Client:Body: {<br>members: String[]<br>multiCurrency: Boolean <br> acceptRequired: Boolean <br> currency: String?<br>}<br>
     
-    
-    Client->>GroupManager: Join group POST /external/join/{group_id}
+    Client->>GroupManager: Join group POST /external/join
     Note over Client,GroupManager:token-validated: TOKEN <br> Body: { <br> code: String <br> } <br>
-    GroupManager->>GroupManager: Check if user is already a group member
-    alt User is not a group member
-        GroupManager->>GroupManager: Check if code is correct
-        alt Code is correct
-            GroupManager->>GroupManager: Add user to the group
-            GroupManager->>Client: 200 OK
-        else Code is not correct
-            GroupManager->>Client: 400 Bad Request
-        end
-    else User is a group member
-        GroupManager->>Client: 403 Forbidden
+    GroupManager->>GroupManager: Check if code is correct
+    alt Code is correct
+        GroupManager->>GroupManager: Add user to the group
+        GroupManager->>Client: 200 OK
+    else Code is not correctcurrencies
+        GroupManager->>Client: 400 Bad Request
     end
+
     
 
 
 
 ```
+
+## Expense Manager
+
+```mermaid
+classDiagram
+    class Expense {
+        id: String
+        groupId: String
+        creatorId: String
+        title: String
+        attachmentId: String
+        fullCost: Number
+        currency: String
+        createdAt: Date
+        expenseDate: Date
+        expenseParticipants: ExpenseParticipant[]
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        statusHistory: StatusHistory[]
+    }
+    
+    class ExpenseParticipant {
+        userId: String
+        cost: Number
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+    }
+    
+    class StatusHistory {
+        userId: String
+        action: "ACCEPTED" | "REJECTED" | "CREATED" | "EDITED" | "DELETED"
+        date: Date
+    }
+
+```
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant ExpenseManager
+    
+    Client->>ExpenseManager: Create Expense POST /external/expenses/{group_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN<br> Body: { <br> title: String<br>attachmentId: String<br>fullCost: Number<br> currency: String<br> expenseDate: Date<br> membersWithCosts: MembersWithCosts <br>}
+    ExpenseManager->>ExpenseManager:Validate body
+    alt Body is Valid
+        ExpenseManager->>ExpenseManager: Check if user is a group member
+        alt User is a group member
+            ExpenseManager->>ExpenseManager: Check if currency is available
+            alt Currency is available
+                ExpenseManager->>ExpenseManager: Check if all participants are group members
+                alt All participants are group members
+                    ExpenseManager->>ExpenseManager: Create expense
+                    ExpenseManager->>Client: 201 Created
+                    Note over ExpenseManager,Client: Body{<br> expenseId: String <br>}
+                else Not all participants are group members
+                    ExpenseManager->>Client: 422 Unprocessable Content
+                end
+            else Currency is not available
+                ExpenseManager->>Client: 400 Bad Request
+            end
+        else User is not a group member
+            ExpenseManager->>Client: 403 Forbidden
+        end
+    else Body is not valid
+    ExpenseManager->>Client: 400 Bad Request
+    end
+    
+    Client->>ExpenseManager: Edit expense PUT /external/expenses/{group_id}/{expense_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN<br> Body: { <br> title: String<br>fullCost: Number<br> currency: String<br> expenseDate: Date<br> membersWithCosts: MembersWithCosts <br>}
+    ExpenseManager->>ExpenseManager:Validate body
+    alt Body is Valid
+        ExpenseManager->>ExpenseManager: Check if user is an owner of the expense
+        alt User is an owner of the expense
+            ExpenseManager->>ExpenseManager: Check if currency is available
+            alt Currency is available
+                ExpenseManager->>ExpenseManager: Check if all participants are group members
+                alt All participants are group members
+                    ExpenseManager->>ExpenseManager: Edit expense & update statusHistory & set all statuses to pending
+                    ExpenseManager->>Client: 200 OK
+                else Not all participants are group members
+                    ExpenseManager->>Client: 422 Unprocessable Content
+                end
+            else Currency is not available
+                ExpenseManager->>Client: 400 Bad Request
+            end
+        else User is not an owner of the expense
+            ExpenseManager->>Client: 403 Forbidden
+        end
+    else Body is not valid
+        ExpenseManager->>Client: 400 Bad Request
+    end
+    
+    Client->>ExpenseManager: Delete expense DELETE /external/expenses/{group_id}/{expense_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN
+    ExpenseManager->>ExpenseManager: Check if user is an owner of the expense
+    alt User is an owner of the expense
+        ExpenseManager->>ExpenseManager: Delete expense
+        ExpenseManager->>Client: 200 OK
+    else User is not an owner of the expense
+        ExpenseManager->>Client: 403 Forbidden
+    end
+    
+    Client->>ExpenseManager: Get expense GET /external/expenses/{group_id}/{expense_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN
+    ExpenseManager->>ExpenseManager: Check if user is a group member
+    alt User is a group member
+        ExpenseManager->>ExpenseManager: Get expense data
+        ExpenseManager->>Client: 200 OK
+        Note over Client,ExpenseManager:<br> Body: { <br> id: String<br> creatorId: String <br> title: String<br>attachmentId: String<br>fullCost: Number<br> currency: String<br> expenseDate: Date <br> createdAt: Date <br> expenseParticipants: ExpenseParticipant[] <br> status: "ACCEPTED" | "REJECTED" | "PENDING" <br> statusHistory: StatusHistory[] <br>}
+    else User is not a group member
+        ExpenseManager->>Client: 403 Forbidden
+    end
+
+    Client->>ExpenseManager: Get expense GET /external/expenses/{group_id}?filters=val
+    Note over Client,ExpenseManager: token-validated: TOKEN
+    ExpenseManager->>ExpenseManager: Check if user is a group member
+    alt User is a group member
+        ExpenseManager->>ExpenseManager: Get filtered expenses
+        ExpenseManager->>Client: 200 OK
+        Note over Client,ExpenseManager:<br> Body: { <br> expensesBasicData: ExpenseBasicData[] <br>}
+    else User is not a group member
+        ExpenseManager->>Client: 403 Forbidden
+    end
+
+    Client->>ExpenseManager: Accept or reject expense POST /external/decide/{group_id}/{expense_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN <br> Body: { <br> decistion: "ACCEPT" | "REJECT" <br>}
+    ExpenseManager->>ExpenseManager: Check if user is an expense participant
+    alt User is an expense participant
+        ExpenseManager->>ExpenseManager:Validate body
+        alt Body is Valid
+            ExpenseManager->>Client: 200 OK
+        else Body is not Valid
+            ExpenseManager->>Client: 400 Bad Request
+        end
+    else User is not an expense participant
+        ExpenseManager->>Client: 403 Forbidden
+    end
+
+
+```
+
+
 
 ## Attachment Store
 
