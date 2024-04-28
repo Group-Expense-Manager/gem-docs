@@ -235,7 +235,13 @@ sequenceDiagram
     else User is not a group member
         UserDetailsManager->>Client: 403 Forbidden
     end
-   
+
+    Client->>UserDetailsManager: get user details of group members GET /internal/user-details/{group_id}
+    Note over Client,UserDetailsManager: token-validated: TOKEN
+    UserDetailsManager->>UserDetailsManager: Get user details of group members
+    UserDetailsManager->>Client: 200 OK
+    Note over Client,UserDetailsManager:<br> Body: {<br> userDetails: UserDetails[] <br>}
+
 ```
 
 ## Group Manager
@@ -248,9 +254,8 @@ classDiagram
         colour: Number
         owner: String
         members: String[]
-        multiCurrency: Boolean
         acceptRequired: Boolean
-        currency: String?
+        baseCurrencies: String[]
         joinCode: String
         attachmentId: String
         
@@ -263,7 +268,7 @@ sequenceDiagram
     participant GroupManager
     
     Client->>GroupManager: Create group POST /external/groups
-    Note over Client,GroupManager:token-validated: TOKEN<br> Body: {<br>name: String<br> colour: Number<br>multiCurrency: Boolean <br> acceptRequired: Boolean <br> currency: String? <br> attachmentId: String <br>}<br>
+    Note over Client,GroupManager:token-validated: TOKEN<br> Body: {<br>name: String<br> colour: Number<br> acceptRequired: Boolean <br> baseCurrencies: String[] <br> attachmentId: String <br>}<br>
     GroupManager->>GroupManager:validate Body
     alt Body is valid
         GroupManager->>GroupManager: Check if currency is available
@@ -312,7 +317,7 @@ sequenceDiagram
     alt User is a group member
         GroupManager->>GroupManager: Get group data
         GroupManager->>Client: 200 OK
-        Note over GroupManager,Client:Body: {<br>name: String<br> colour: Number<br> owner: String <br> members: String[]<br>multiCurrency: Boolean <br> acceptRequired: Boolean <br> currencies: String[] <br> joinCode:String <br> attachmentId: String<br>}<br>
+        Note over GroupManager,Client:Body: {<br>name: String<br> colour: Number<br> owner: String <br> members: String[] <br> acceptRequired: Boolean <br> baseCurrencies: String[] <br> joinCode:String <br> attachmentId: String<br>}<br>
     else User is not a group member
         GroupManager->>Client: 403 Forbidden
     end
@@ -336,7 +341,7 @@ sequenceDiagram
     Client->>GroupManager: Get group data GET /internal/groups/{group_id}
     GroupManager->>GroupManager: Get group data
     GroupManager->>Client: 200 OK
-    Note over GroupManager,Client:Body: {<br>members: String[]<br>multiCurrency: Boolean <br> acceptRequired: Boolean <br> currency: String?<br>}<br>
+    Note over GroupManager,Client:Body: {<br>members: String[]<br> acceptRequired: Boolean <br> baseCurrencies: String[]<br>}<br>
     
     Client->>GroupManager: Join group POST /external/join
     Note over Client,GroupManager:token-validated: TOKEN <br> Body: { <br> code: String <br> } <br>
@@ -347,10 +352,6 @@ sequenceDiagram
     else Code is not correctcurrencies
         GroupManager->>Client: 400 Bad Request
     end
-
-    
-
-
 
 ```
 
@@ -366,11 +367,14 @@ classDiagram
         attachmentId: String
         fullCost: Number
         currency: String
+        targetCurrency: String?
+        exchangeRate: Number?
         createdAt: Date
         expenseDate: Date
         expenseParticipants: ExpenseParticipant[]
         status: "ACCEPTED" | "REJECTED" | "PENDING"
         statusHistory: StatusHistory[]
+        updatedAt: Date
     }
     
     class ExpenseParticipant {
@@ -383,6 +387,7 @@ classDiagram
         userId: String
         action: "ACCEPTED" | "REJECTED" | "CREATED" | "EDITED" | "DELETED"
         date: Date
+        comment: String?
     }
 
 ```
@@ -392,23 +397,24 @@ sequenceDiagram
     participant Client
     participant ExpenseManager
     
-    Client->>ExpenseManager: Create Expense POST /external/expenses/{group_id}
-    Note over Client,ExpenseManager: token-validated: TOKEN<br> Body: { <br> title: String<br>attachmentId: String<br>fullCost: Number<br> currency: String<br> expenseDate: Date<br> membersWithCosts: MembersWithCosts <br>}
+    Client->>ExpenseManager: Create Expense POST /external/expenses?group_id={group_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN<br> Body: { <br> title: String<br>attachmentId: String<br>fullCost: Number<br> currency: String<br> targetCurrency: String? <br> expenseDate: Date<br> membersWithCosts: MembersWithCosts <br>}
     ExpenseManager->>ExpenseManager:Validate body
     alt Body is Valid
         ExpenseManager->>ExpenseManager: Check if user is a group member
         alt User is a group member
-            ExpenseManager->>ExpenseManager: Check if currency is available
-            alt Currency is available
+            ExpenseManager->>ExpenseManager: Check if currency & targetCurrency are available & if targetCurrency is main
+            alt Currencies are available
                 ExpenseManager->>ExpenseManager: Check if all participants are group members
                 alt All participants are group members
+                    ExpenseManager->>ExpenseManager: Fetch exchange rate
                     ExpenseManager->>ExpenseManager: Create expense
                     ExpenseManager->>Client: 201 Created
                     Note over ExpenseManager,Client: Body{<br> expenseId: String <br>}
                 else Not all participants are group members
                     ExpenseManager->>Client: 422 Unprocessable Content
                 end
-            else Currency is not available
+            else Currencies are not available
                 ExpenseManager->>Client: 400 Bad Request
             end
         else User is not a group member
@@ -418,22 +424,23 @@ sequenceDiagram
     ExpenseManager->>Client: 400 Bad Request
     end
     
-    Client->>ExpenseManager: Edit expense PUT /external/expenses/{group_id}/{expense_id}
-    Note over Client,ExpenseManager: token-validated: TOKEN<br> Body: { <br> title: String<br>fullCost: Number<br> currency: String<br> expenseDate: Date<br> membersWithCosts: MembersWithCosts <br>}
+    Client->>ExpenseManager: Edit expense PUT /external/expenses/{expense_id}?group_id={group_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN<br> Body: { <br> title: String<br>fullCost: Number<br> currency: String<br> targetCurrency: String?<br> expenseDate: Date<br> membersWithCosts: MembersWithCosts <br>}
     ExpenseManager->>ExpenseManager:Validate body
     alt Body is Valid
         ExpenseManager->>ExpenseManager: Check if user is an owner of the expense
         alt User is an owner of the expense
-            ExpenseManager->>ExpenseManager: Check if currency is available
-            alt Currency is available
+            ExpenseManager->>ExpenseManager: Check if currency & targetCurrency are available  & if targetCurrency is main
+            alt Currencies are available
                 ExpenseManager->>ExpenseManager: Check if all participants are group members
                 alt All participants are group members
+                    ExpenseManager->>ExpenseManager: Fetch exchange rate
                     ExpenseManager->>ExpenseManager: Edit expense & update statusHistory & set all statuses to pending
                     ExpenseManager->>Client: 200 OK
                 else Not all participants are group members
                     ExpenseManager->>Client: 422 Unprocessable Content
                 end
-            else Currency is not available
+            else Currenceis are not available
                 ExpenseManager->>Client: 400 Bad Request
             end
         else User is not an owner of the expense
@@ -443,7 +450,7 @@ sequenceDiagram
         ExpenseManager->>Client: 400 Bad Request
     end
     
-    Client->>ExpenseManager: Delete expense DELETE /external/expenses/{group_id}/{expense_id}
+    Client->>ExpenseManager: Delete expense DELETE /external/expenses/{expense_id}?group_id={group_id}
     Note over Client,ExpenseManager: token-validated: TOKEN
     ExpenseManager->>ExpenseManager: Check if user is an owner of the expense
     alt User is an owner of the expense
@@ -453,18 +460,18 @@ sequenceDiagram
         ExpenseManager->>Client: 403 Forbidden
     end
     
-    Client->>ExpenseManager: Get expense GET /external/expenses/{group_id}/{expense_id}
+    Client->>ExpenseManager: Get expense GET /external/expenses/{expense_id}?group_id={group_id}
     Note over Client,ExpenseManager: token-validated: TOKEN
     ExpenseManager->>ExpenseManager: Check if user is a group member
     alt User is a group member
         ExpenseManager->>ExpenseManager: Get expense data
         ExpenseManager->>Client: 200 OK
-        Note over Client,ExpenseManager:<br> Body: { <br> id: String<br> creatorId: String <br> title: String<br>attachmentId: String<br>fullCost: Number<br> currency: String<br> expenseDate: Date <br> createdAt: Date <br> expenseParticipants: ExpenseParticipant[] <br> status: "ACCEPTED" | "REJECTED" | "PENDING" <br> statusHistory: StatusHistory[] <br>}
+        Note over Client,ExpenseManager:<br> Body: { <br> id: String<br> creatorId: String <br> title: String<br>attachmentId: String<br>fullCost: Number<br> currency: String<br> targetCurrency: String?<br>exchangeRate: String?<br> expenseDate: Date <br> createdAt: Date <br> expenseParticipants: ExpenseParticipant[] <br> status: "ACCEPTED" | "REJECTED" | "PENDING" <br> statusHistory: StatusHistory[] <br>updatedAt: Date<br>}
     else User is not a group member
         ExpenseManager->>Client: 403 Forbidden
     end
 
-    Client->>ExpenseManager: Get expense GET /external/expenses/{group_id}?filters=val
+    Client->>ExpenseManager: Get expense GET /external/expenses?group_id={group_id}&filters=val
     Note over Client,ExpenseManager: token-validated: TOKEN
     ExpenseManager->>ExpenseManager: Check if user is a group member
     alt User is a group member
@@ -475,23 +482,353 @@ sequenceDiagram
         ExpenseManager->>Client: 403 Forbidden
     end
 
-    Client->>ExpenseManager: Accept or reject expense POST /external/decide/{group_id}/{expense_id}
-    Note over Client,ExpenseManager: token-validated: TOKEN <br> Body: { <br> decistion: "ACCEPT" | "REJECT" <br>}
-    ExpenseManager->>ExpenseManager: Check if user is an expense participant
-    alt User is an expense participant
-        ExpenseManager->>ExpenseManager:Validate body
-        alt Body is Valid
+    Client->>ExpenseManager: Accept or reject expense POST /external/decide?group_id={group_id}&expense_id={expense_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN <br> Body: { <br> decision: "ACCEPT" | "REJECT" <br>comment: String<br>}
+    ExpenseManager->>ExpenseManager:Validate body
+    alt Body is Valid
+        ExpenseManager->>ExpenseManager: Check if user is an expense participant
+        alt User is an expense participant
+        ExpenseManager->>ExpenseManager: Set status for user & updateStatusHistory
             ExpenseManager->>Client: 200 OK
-        else Body is not Valid
-            ExpenseManager->>Client: 400 Bad Request
+        else User is not an expense participant
+            ExpenseManager->>Client: 403 Forbidden
         end
-    else User is not an expense participant
-        ExpenseManager->>Client: 403 Forbidden
+    else Body is not Valid    
+        ExpenseManager->>Client: 400 Bad Request
     end
+    
+    
+    Client->>ExpenseManager: Get group expenses GET /internal/expenses?group_id={group_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN
+    ExpenseManager->>ExpenseManager: Get expenses data
+    ExpenseManager->>Client: 200 OK
+    Note over Client,ExpenseManager:<br> Body: { <br> expensesFinanceData: ExpenseFinanceData[] <br>}
+
+```
+
+## Payment Manager
+
+```mermaid
+classDiagram
+    class Payment {
+        id: String
+        groupId: String
+        creatorId: String
+        recipientId: String
+        title: Stringreport
+        type: "CASH" | "BANK_TRANSFER" | "MOBILE_PAYMENT" | "OTHER"
+        attachmentId: String
+        sum: Number
+        currency: String
+        targetCurrency: String?
+        exchangeRate: String?
+        createdAt: Date
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        statusHistory: StatusHistory[]
+        updatedAt: Date
+    }
+
+    class StatusHistory {
+        userId: String
+        action: "ACCEPTED" | "REJECTED" | "CREATED" | "EDITED" | "DELETED"
+        date: Date
+        comment: String?
+    }
+```
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant PaymentManager
+
+    Client->>PaymentManager: Create Payment POST /external/payments?group_id={group_id}
+    Note over Client,PaymentManager: token-validated: TOKEN<br> Body: { <br> recipientId:String <br> title: String<br> type: Type <br>attachmentId: String<br>sum: Number<br> currency: String<br> targetCurrency: String?<br>}
+    PaymentManager->>PaymentManager:Validate body
+    alt Body is Valid
+        PaymentManager->>PaymentManager: Check if user is a group member
+        alt User is a group member
+            PaymentManager->>PaymentManager: Check if currency & targetCurrency are available  & if targetCurrency is main
+            alt Currencies are available
+                PaymentManager->>PaymentManager: Check if recipient is a group member
+                alt Recipient is a group member
+                    PaymentManager->>PaymentManager: Fetch exchange rate
+                    PaymentManager->>PaymentManager: Create payment
+                    PaymentManager->>Client: 201 Created
+                    Note over PaymentManager,Client: Body{<br> paymentId: String <br>}
+                else Recipient is not a group member
+                    PaymentManager->>Client: 422 Unprocessable Content
+                end
+            else Currencies are not available
+                PaymentManager->>Client: 400 Bad Request
+            end
+        else User is not a group member
+            PaymentManager->>Client: 403 Forbidden
+        end
+    else Body is not valid
+        PaymentManager->>Client: 400 Bad Request
+    end
+
+
+    Client->>PaymentManager: Edit Payment PUT /external/payments/{payment_id}?group_id={group_id}
+    Note over Client,PaymentManager: token-validated: TOKEN<br> Body: { <br> recipientId:String <br> title: String<br> type: Type<br>sum: Number<br> currency: String<br> targetCurrency: String?<br>}
+    PaymentManager->>PaymentManager:Validate body
+    alt Body is Valid
+        PaymentManager->>PaymentManager: Check if user is a payment owner
+        alt Check if user is a payment owner
+            PaymentManager->>PaymentManager: Check if currency & targetCurrency are available  & if targetCurrency is main
+            alt Currencies are available
+                PaymentManager->>PaymentManager: Check if recipient is a group member
+                alt Recipient is a group member
+                    PaymentManager->>PaymentManager: Fetch exchange rate
+                    PaymentManager->>PaymentManager: Edit payment & update statusHistory & set all statuses to pending
+                    PaymentManager->>Client: 201 Created
+                    Note over PaymentManager,Client: Body{<br> paymentId: String <br>}
+                else Recipient is not a group member
+                    PaymentManager->>Client: 422 Unprocessable Content
+                end
+            else Currencies are not available
+                PaymentManager->>Client: 400 Bad Request
+            end
+        else Check if user is not a payment owner
+            PaymentManager->>Client: 403 Forbidden
+        end
+    else Body is not valid
+        PaymentManager->>Client: 400 Bad Request
+    end
+
+
+    Client->>PaymentManager: Delete payment DELETE /external/payments/{payment_id}?group_id={group_id}
+    Note over Client,PaymentManager: token-validated: TOKEN
+    PaymentManager->>PaymentManager: Check if user is an owner of the payment
+    alt User is an owner of the payment
+        PaymentManager->>PaymentManager: Delete payment
+        PaymentManager->>Client: 200 OK
+    else User is not an owner of the payment
+        PaymentManager->>Client: 403 Forbidden
+    end
+
+
+    Client->>PaymentManager: Get payment GET /external/payments/{payment_id}?group_id={group_id}
+    Note over Client,PaymentManager: token-validated: TOKEN
+    PaymentManager->>PaymentManager: Check if user is a group member
+    alt User is a group member
+        PaymentManager->>PaymentManager: Get payment data
+        PaymentManager->>Client: 200 OK
+        Note over Client,PaymentManager:Body: {<br> id: String <br>creatorId: String<br> recipientId: String <br> title: String<br> type: Type<br>attachmentId:String<br> sum: Number<br> currency: String<br> targetCurrency: String?<br>exchangeRate:Number?<br>createdAt:Date<br>status: "ACCEPTED" | "REJECTED" | "PENDING"<br>statusHistory: StatusHistory[]<br>updatedAt: Date<br>}
+    else User is not a group member
+        PaymentManager->>Client: 403 Forbidden
+    end
+
+
+    Client->>PaymentManager: Get payments GET /external/payments?group_id={group_id}&filters=val
+    Note over Client,PaymentManager: token-validated: TOKEN
+    PaymentManager->>PaymentManager: Check if user is a group member
+    alt User is a group member
+        PaymentManager->>PaymentManager: Get filtered payments
+        PaymentManager->>Client: 200 OK
+        Note over Client,PaymentManager:<br> Body: { <br> paymentsBasicData: PaymentBasicData[] <br>}
+    else User is not a group member
+        PaymentManager->>Client: 403 Forbidden
+    end
+
+    Client->>PaymentManager: Accept or reject payment POST /external/decide/?group_id={group_id}&payment_id={payment_id}
+    Note over Client,PaymentManager: token-validated: TOKEN <br> Body: { <br> decision: "ACCEPT" | "REJECT" <br> comment: String? <br>}
+    PaymentManager->>PaymentManager:Validate body
+    alt Body is Valid
+        PaymentManager->>PaymentManager: Check if user is a payment participant
+        alt User is a payment participant
+            PaymentManager->>PaymentManager: Set status for user & update StatusHistory
+            PaymentManager->>Client: 200 OK
+        else User is not an payment participant
+            PaymentManager->>Client: 403 Forbidden
+        end
+    else Body is not Valid
+        PaymentManager->>Client: 400 Bad Request
+    end
+
+    Client->>PaymentManager: Get group payments GET /internal/payments?group_id={group_id}
+    Note over Client,PaymentManager: token-validated: TOKEN
+    PaymentManager->>PaymentManager: Get payments data
+    PaymentManager->>Client: 200 OK
+    Note over Client,PaymentManager:<br> Body: { <br> paymentsFinanceData: PaymentsFinanceData[] <br>}
+
+```
+
+
+## Finance Adapter
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant FinanceAdapter
+    
+    Client->>FinanceAdapter: Get group balance & suggested alignment GET /external/balances/groups?group_id={group_id}
+    Note over Client,FinanceAdapter: token-validated: TOKEN
+    FinanceAdapter->>FinanceAdapter: Check if user is a group member
+    alt User is a group member
+        FinanceAdapter->>FinanceAdapter: Fetch group expense & payment data
+        FinanceAdapter->>FinanceAdapter: Get group balance & suggested alignment
+        FinanceAdapter->>Client: 200 OK
+        Note over FinanceAdapter,Client: Body: { <br> groupBalance: UserBalance[] <br> suggestedAlignment: SuggestedAlignment <br> }
+
+    else User is not a group member
+        FinanceAdapter->>Client: 403 Forbidden
+    end
+
+
+    Client->>FinanceAdapter: Get user balance GET /external/balances?group_id={group_id}
+    Note over Client,FinanceAdapter: token-validated: TOKEN
+    FinanceAdapter->>FinanceAdapter: Check if user is a group member
+    alt User is a group member
+        FinanceAdapter->>FinanceAdapter: Fetch group expense & payment data
+        FinanceAdapter->>FinanceAdapter: Get user balance
+        FinanceAdapter->>Client: 200 OK
+        Note over FinanceAdapter,Client: Body: { <br> userBalance: Number <br> }
+    else User is not a group member
+        FinanceAdapter->>Client: 403 Forbidden
+    end
+    
+    Client->>FinanceAdapter: Get group balance GET /internal/balances/groups?group_id={group_id}
+    Note over Client,FinanceAdapter: token-validated: TOKEN
+    FinanceAdapter->>FinanceAdapter: Fetch group expense & payment data
+    FinanceAdapter->>FinanceAdapter: Get group balance
+    FinanceAdapter->>Client: 200 OK
+    Note over FinanceAdapter,Client: Body: { <br> groupBalance: UserBalance[] <br> }
+
+
+
+    Client->>FinanceAdapter: Get group balance  & suggested alignment & finance data GET /internal/reports?group_id={group_id}
+    Note over Client,FinanceAdapter: token-validated: TOKEN
+    FinanceAdapter->>FinanceAdapter: Fetch group expense & payment data
+    FinanceAdapter->>FinanceAdapter: Get group balance
+    FinanceAdapter->>Client: 200 OK
+    Note over FinanceAdapter,Client: Body: { <br> groupBalance: UserBalance[] <br> suggestedAlignment: SuggestedAlignment<br> groupFinances: GroupFinances <br> }
 
 
 ```
 
+## Report Creator
+
+```mermaid
+classDiagram
+    class Report {
+        id: String
+        groupId: String
+        createdAt: Date
+        pdfAttachmentId: String
+        csvAttachmentId: String
+    }
+```
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant ReportCreator
+
+    Client->>ReportCreator: Generate report POST /external/generate?group_id={group_id}
+    Note over Client,ReportCreator: token-validated: TOKEN
+    ReportCreator->>ReportCreator: Check if user is a group member
+    alt User is a group member
+        ReportCreator->>ReportCreator: Fetch expense & payment data
+        ReportCreator->>ReportCreator: Fetch group members details
+        ReportCreator->>ReportCreator: Create report pdf & csv
+        ReportCreator->>ReportCreator: Send report to AttachmentStore
+        ReportCreator->>Client: 201 Created
+    else User is not a group member
+        ReportCreator->>Client: 403 Forbidden
+    end
+
+    Client->>ReportCreator: Get reports GET /external/reports?group_id={group_id}
+    Note over Client,ReportCreator: token-validated: TOKEN
+    ReportCreator->>ReportCreator: Check if user is a group member
+    alt User is a group member
+        ReportCreator->>ReportCreator: Get report list
+        ReportCreator->>Client: 200 OK
+        Note over ReportCreator,Client: Body: {<br> reportsData: ReportData[] <br>}
+    else User is not a group member
+        ReportCreator->>Client: 403 Forbidden
+    end
+
+    Client->>ReportCreator: Send report by mail POST /external/send-report/{attachment_id   }
+    Note over Client,ReportCreator: token-validated: TOKEN
+    ReportCreator->>ReportCreator: Check if user is a group member
+    alt User is a group member
+        ReportCreator->>ReportCreator: Order EmailSender to send report
+        ReportCreator->>Client: 200 Ok
+    else User is not a group member
+        ReportCreator->>Client: 403 Forbidden
+    end
+
+```
+
+
+## Currency Manager
+
+```mermaid
+classDiagram
+    class Currency {
+        code: String
+    }
+    class ExchangeRateCache {
+        currencyFrom: String
+        currencyTo: String
+        date: Date
+        value: Value
+    }
+```
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant CurrencyManager
+    
+    
+    Client->>CurrencyManager: Get available currencies GET /external/currencies
+    Note over Client,CurrencyManager: token-validated: TOKEN
+    CurrencyManager->>CurrencyManager: Get available currencies
+    CurrencyManager->>Client: 200 OK
+    Note over CurrencyManager,Client: Body{<br> currencies: String[]<br>}
+
+    Client->>CurrencyManager: Get available currencies GET /internal/currencies
+    Note over Client,CurrencyManager: token-validated: TOKEN
+    CurrencyManager->>CurrencyManager: Get available currencies
+    CurrencyManager->>Client: 200 OK
+    Note over CurrencyManager,Client: Body{<br> currencies: String[]<br>}
+
+    Client->>CurrencyManager: Get exchange rate GET /external/exchange-rate?currencyFrom=val1&currencyTo=val2?date=val3
+    Note over Client,CurrencyManager: token-validated: TOKEN
+    CurrencyManager->>CurrencyManager: Validate query params
+    alt Query params are valid
+        CurrencyManager->>CurrencyManager: Check if currencies are available
+        alt Currencies are available
+            CurrencyManager->>CurrencyManager: Check if exchange rate is cached
+            alt exchange rate is cached
+                CurrencyManager->>CurrencyManager: Get exchange-rate
+                CurrencyManager->>Client: 200 OK
+                Note over CurrencyManager,Client: Body{<br> exchangeRate: Number<br>}
+            else exchange rate is not cached
+                CurrencyManager->>CurrencyManager: Try to fetch exchange rate from external provider
+                alt Exchange rate fetched successfully
+                    CurrencyManager->>CurrencyManager: Cache exchange rate
+                    CurrencyManager->>Client: 200 OK
+                    Note over CurrencyManager,Client: Body{<br> exchangeRate: Number<br>}
+                else Failed to fetch exchange reate
+                    CurrencyManager->>Client: 424 Failed Dependency
+                end
+            end
+        else Currencies are not available
+            CurrencyManager->>Client: 400 Bad Request
+        end
+    else Query params are not valid
+        CurrencyManager->>Client: 400 Bad Request
+    end
+
+
+
+
+
+
+```
 
 
 ## Attachment Store
