@@ -203,8 +203,8 @@ sequenceDiagram
     participant Client
     participant UserDetailsManager
 
-    Client->>UserDetailsManager: Create user details POST /internal/user-details
-    Note over Client,UserDetailsManager: token-validated: TOKEN<br>Body: {<br>email: String <br>}
+    Client->>UserDetailsManager: Create user details POST /internal/user-details/{user_id}
+    Note over Client,UserDetailsManager: Body: {<br>email: String <br>}
     UserDetailsManager->>UserDetailsManager: Create user details
     UserDetailsManager->>Client: 201 Created
 
@@ -237,7 +237,6 @@ sequenceDiagram
     end
 
     Client->>UserDetailsManager: get user details of group members GET /internal/user-details/{group_id}
-    Note over Client,UserDetailsManager: token-validated: TOKEN
     UserDetailsManager->>UserDetailsManager: Get user details of group members
     UserDetailsManager->>Client: 200 OK
     Note over Client,UserDetailsManager:<br> Body: {<br> userDetails: UserDetails[] <br>}
@@ -498,9 +497,13 @@ sequenceDiagram
     end
     
     
-    Client->>ExpenseManager: Get group expenses GET /internal/expenses?group_id={group_id}
-    Note over Client,ExpenseManager: token-validated: TOKEN
+    Client->>ExpenseManager: Get group expenses GET /internal/expenses/groups/{group_id}
     ExpenseManager->>ExpenseManager: Get expenses data
+    ExpenseManager->>Client: 200 OK
+    Note over Client,ExpenseManager:<br> Body: { <br> expensesFinanceData: ExpenseFinanceData[] <br>}
+
+    Client->>ExpenseManager: Get user expenses GET /internal/expenses/groups/{group_id}/users/{user_id}
+    ExpenseManager->>ExpenseManager: Get user expenses data
     ExpenseManager->>Client: 200 OK
     Note over Client,ExpenseManager:<br> Body: { <br> expensesFinanceData: ExpenseFinanceData[] <br>}
 
@@ -646,9 +649,13 @@ sequenceDiagram
         PaymentManager->>Client: 400 Bad Request
     end
 
-    Client->>PaymentManager: Get group payments GET /internal/payments?group_id={group_id}
-    Note over Client,PaymentManager: token-validated: TOKEN
+    Client->>PaymentManager: Get group payments GET /internal/payments/groups/{group_id}
     PaymentManager->>PaymentManager: Get payments data
+    PaymentManager->>Client: 200 OK
+    Note over Client,PaymentManager:<br> Body: { <br> paymentsFinanceData: PaymentsFinanceData[] <br>}
+
+    Client->>PaymentManager: Get group payments GET /internal/payments/groups/{group_id}/users/{user_id}
+    PaymentManager->>PaymentManager: Get user payments data
     PaymentManager->>Client: 200 OK
     Note over Client,PaymentManager:<br> Body: { <br> paymentsFinanceData: PaymentsFinanceData[] <br>}
 
@@ -662,7 +669,7 @@ sequenceDiagram
     participant Client
     participant FinanceAdapter
     
-    Client->>FinanceAdapter: Get group balance & suggested alignment GET /external/balances/groups?group_id={group_id}
+    Client->>FinanceAdapter: Get group balance & suggested alignment GET /external/balances/groups/{group_id}
     Note over Client,FinanceAdapter: token-validated: TOKEN
     FinanceAdapter->>FinanceAdapter: Check if user is a group member
     alt User is a group member
@@ -676,11 +683,11 @@ sequenceDiagram
     end
 
 
-    Client->>FinanceAdapter: Get user balance GET /external/balances?group_id={group_id}
+    Client->>FinanceAdapter: Get user balance GET /external/balances/groups/{group_id}/users
     Note over Client,FinanceAdapter: token-validated: TOKEN
     FinanceAdapter->>FinanceAdapter: Check if user is a group member
     alt User is a group member
-        FinanceAdapter->>FinanceAdapter: Fetch group expense & payment data
+        FinanceAdapter->>FinanceAdapter: Fetch user expense & payment data
         FinanceAdapter->>FinanceAdapter: Get user balance
         FinanceAdapter->>Client: 200 OK
         Note over FinanceAdapter,Client: Body: { <br> userBalance: Number <br> }
@@ -688,17 +695,15 @@ sequenceDiagram
         FinanceAdapter->>Client: 403 Forbidden
     end
     
-    Client->>FinanceAdapter: Get group balance GET /internal/balances/groups?group_id={group_id}
-    Note over Client,FinanceAdapter: token-validated: TOKEN
-    FinanceAdapter->>FinanceAdapter: Fetch group expense & payment data
+    Client->>FinanceAdapter: Get group balance GET /internal/balances/groups/{group_id}
+    FinanceAdapter->>FinanceAdapter: Fetch user expense & payment data
     FinanceAdapter->>FinanceAdapter: Get group balance
     FinanceAdapter->>Client: 200 OK
     Note over FinanceAdapter,Client: Body: { <br> groupBalance: UserBalance[] <br> }
 
 
 
-    Client->>FinanceAdapter: Get group balance  & suggested alignment & finance data GET /internal/reports?group_id={group_id}
-    Note over Client,FinanceAdapter: token-validated: TOKEN
+    Client->>FinanceAdapter: Get group balance  & suggested alignment & finance data GET /internal/reports/groups/{group_id}
     FinanceAdapter->>FinanceAdapter: Fetch group expense & payment data
     FinanceAdapter->>FinanceAdapter: Get group balance
     FinanceAdapter->>Client: 200 OK
@@ -766,13 +771,10 @@ sequenceDiagram
 
 ```mermaid
 classDiagram
-    class Currency {
-        code: String
-    }
     class ExchangeRateCache {
         currencyFrom: String
         currencyTo: String
-        date: Date
+        createdAt: Date
         value: Value
     }
 ```
@@ -790,7 +792,6 @@ sequenceDiagram
     Note over CurrencyManager,Client: Body{<br> currencies: String[]<br>}
 
     Client->>CurrencyManager: Get available currencies GET /internal/currencies
-    Note over Client,CurrencyManager: token-validated: TOKEN
     CurrencyManager->>CurrencyManager: Get available currencies
     CurrencyManager->>Client: 200 OK
     Note over CurrencyManager,Client: Body{<br> currencies: String[]<br>}
@@ -807,14 +808,7 @@ sequenceDiagram
                 CurrencyManager->>Client: 200 OK
                 Note over CurrencyManager,Client: Body{<br> exchangeRate: Number<br>}
             else exchange rate is not cached
-                CurrencyManager->>CurrencyManager: Try to fetch exchange rate from external provider
-                alt Exchange rate fetched successfully
-                    CurrencyManager->>CurrencyManager: Cache exchange rate
-                    CurrencyManager->>Client: 200 OK
-                    Note over CurrencyManager,Client: Body{<br> exchangeRate: Number<br>}
-                else Failed to fetch exchange reate
-                    CurrencyManager->>Client: 424 Failed Dependency
-                end
+                CurrencyManager->>Client: 424 Failed Dependency
             end
         else Currencies are not available
             CurrencyManager->>Client: 400 Bad Request
@@ -823,10 +817,15 @@ sequenceDiagram
         CurrencyManager->>Client: 400 Bad Request
     end
 
-
-
-
-
+    Client->>CurrencyManager: Get exchange rate GET /internal/exchange-rate?currencyFrom=val1&currencyTo=val2?date=val3
+    CurrencyManager->>CurrencyManager: Check if exchange rate is cached
+    alt exchange rate is cached
+        CurrencyManager->>CurrencyManager: Get exchange-rate
+        CurrencyManager->>Client: 200 OK
+        Note over CurrencyManager,Client: Body{<br> exchangeRate: Number<br>}
+    else exchange rate is not cached
+        CurrencyManager->>Client: 424 Failed Dependency
+    end
 
 ```
 
