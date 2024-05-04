@@ -327,11 +327,6 @@ sequenceDiagram
     GroupManager->>Client: 200 OK
     Note over GroupManager,Client:Body: {<br> userGroupsBasicData: UserGroupsBasicData <br>}
 
-    Client->>GroupManager: Get user's groups ids GET /internal/groups?user_id=val
-    GroupManager->>GroupManager: Get user's groups id
-    GroupManager->>Client: 200 OK
-    Note over GroupManager,Client:Body: { <br> groupIds: GroupIds<br> }
-
     Client->>GroupManager: GET members ids GET /internal/members/{group_id}
     GroupManager->>GroupManager: Get members ids
     GroupManager->>Client: 200 OK

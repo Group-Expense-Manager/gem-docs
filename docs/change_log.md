@@ -50,6 +50,10 @@
 * Aktualizacja wireframów
 * Tworzenie tasków w jirze
 * Diagram komunikacji między-mikroserwisowej
-* ### 22.04.2024 - 28.04.2024
+### 22.04.2024 - 28.04.2024
 * Tworzenie kontraktu dla każdego mikroserwisu
-* 
+### 29.04.2024 - 05.04.2024
+* Tworzenie kontraktu dla każdego mikroserwisu
+* Implementacja gem-lib i service-template (ostatnie poprawki)
+* Implementacja authenticatora, email-sendera, attachment-store'a
+* Testowanie Kubernetesa jako orchestratora

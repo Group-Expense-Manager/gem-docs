@@ -116,8 +116,8 @@ ApiGateway->>-Client: OK
 
 Client->>+ApiGateway: GET /external/user-details/{group_id} (token)
 ApiGateway->>+UserDetailsManager: GET /external/user-details/{group_id} (id)
-UserDetailsManager->>+ GroupManager: GET /internal/groups?user_id=val
-GroupManager->>- UserDetailsManager: OK (group ids)
+UserDetailsManager->>+ GroupManager: GET /internal/members/{group_id}
+GroupManager->>- UserDetailsManager: OK (group members ids)
 UserDetailsManager->>+ GroupManager: /internal/groups/{group_id}/ids
 GroupManager->>- UserDetailsManager: OK
 UserDetailsManager->>-ApiGateway: OK
@@ -194,8 +194,8 @@ ApiGateway->>-Client: OK
 
 Client->>+ApiGateway: GET /external/expenses/{group_id} (token + filters)
 ApiGateway->>+ExpenseManager: GET /external/expenses/{group_id} (id + filters)
-ExpenseManager->>+GroupManager: GET /internal/groups?user_id=val
-GroupManager->>-ExpenseManager: OK (group ids)
+ExpenseManager->>+GroupManager: GET /internal/members/{group_id}
+GroupManager->>-ExpenseManager: OK (group members ids)
 ExpenseManager->>-ApiGateway: OK + ids + names  + date + status
 ApiGateway->>-Client: OK + ids + names  + date + status
 
@@ -245,8 +245,8 @@ ApiGateway->>-Client: OK
 
 Client->>+ApiGateway: GET /external/payments/{group_id} (token + filters)
 ApiGateway->>+PaymentManager: GET /external/payments/{group_id} (id + filters)
-PaymentManager->>+GroupManager: GET /internal/groups?user_id=val
-GroupManager->>-PaymentManager: OK (group ids)
+PaymentManager->>+GroupManager: GET /internal/members/{group_id}
+GroupManager->>-PaymentManager: OK (group members ids)
 PaymentManager->>-ApiGateway: OK + ids + names + date + status
 ApiGateway->>-Client: OK + ids + names + date + status
 
@@ -281,8 +281,8 @@ ApiGateway->>-Client: OK (available currencies)
 sequenceDiagram
 Client->>+ApiGateway: GET /external/balances/groups?group_id={group_id} (token)
 ApiGateway->>+FinanceAdapter: GET /external/balances/groups?group_id={group_id} (id)
-FinanceAdapter->>+GroupManager: GET /internal/groups?user_id=val
-GroupManager->>-FinanceAdapter: OK (group ids)
+FinanceAdapter->>+GroupManager: GET /internal/members/{group_id}
+GroupManager->>-FinanceAdapter: OK (group members ids)
 FinanceAdapter->>+ ExpenseManager: GET /internal/expenses?group_id={group_id} (id)
 ExpenseManager->>- FinanceAdapter: OK (expense data)
 FinanceAdapter->>+ PaymentManager: GET /internal/payments?group_id={group_id} (id)
@@ -292,8 +292,8 @@ ApiGateway->>-Client: OK (group balance + suggested alignment)
 
 Client->>+ApiGateway: GET /external/balances/?group_id={group_id} (token)
 ApiGateway->>+FinanceAdapter: GET /external/balances/?group_id={group_id} (id)
-FinanceAdapter->>+GroupManager: GET /internal/groups?user_id=val
-GroupManager->>-FinanceAdapter: OK (group ids)
+FinanceAdapter->>+GroupManager: GET /internal/members/{group_id}
+GroupManager->>-FinanceAdapter: OK (group members ids)
 FinanceAdapter->>+ ExpenseManager: GET /internal/expenses?group_id={group_id} (id)
 ExpenseManager->>- FinanceAdapter: OK (expense data)
 FinanceAdapter->>+ PaymentManager: GET /internal/payments?group_id={group_id} (id)
@@ -311,7 +311,7 @@ sequenceDiagram
 
 Client->>+ApiGateway: POST /external/generate/{group_id} (token)
 ApiGateway->>+ReportCreator: POST /external/generate/{group_id} (id)
-ReportCreator->>+GroupManager: GET /internal/group?user_id=val
+ReportCreator->>+GroupManager: GET /internal/members/{group_id}
 GroupManager->>-ReportCreator: OK
 ReportCreator->>+UserDetailsManager: GET /internal/user-details/{group_id}
 UserDetailsManager->>-ReportCreator: OK (group user details)
@@ -326,37 +326,20 @@ ApiGateway->>-Client: CREATED
 
 Client->>+ApiGateway: GET /external/reports/{group_id} (token)
 ApiGateway->>+ReportCreator: GET /external/reports/{group_id}(id)
-ReportCreator->>+GroupManager: GET /internal/groups?user_id=val
-GroupManager->>-ReportCreator: OK (group ids)
+ReportCreator->>+GroupManager: GET /internal/members/{group_id}
+GroupManager->>-ReportCreator: OK (group members ids)
 ReportCreator->>-ApiGateway: OK (list of report ids, attachment ids, names, date of creation)
 ApiGateway->>-Client: OK (list of report ids, attachment ids, names, date of creation)
 
 Client->>+ApiGateway: POST /external/send-report/{group_id}/{report_id} (token + report_type)
 ApiGateway->>+ReportCreator: GET /external/send-report/{group_id}/{report_id} (id + report_type)
-ReportCreator->>+GroupManager: GET /internal/groups?user_id=val
-GroupManager->>-ReportCreator: OK (group ids)
+ReportCreator->>+GroupManager: GET /internal/members/{group_id}
+GroupManager->>-ReportCreator: OK (group members ids)
 ReportCreator->>+EmailSender: POST /internal/reports (email, report_id)
 EmailSender->>-ReportCreator: OK
 ReportCreator->>-ApiGateway: OK
 ApiGateway->>-Client: OK
 
-%%Client->>+ApiGateway: GET /external/download-pdf-report/{group_id}/{report_id} (token)
-%%ApiGateway->>+ReportCreator: GET /external/download-pdf-report/{group_id}/{report_id} (id)
-%%ReportCreator->>+GroupManager: GET /internal/groups?user_id=val
-%%GroupManager->>-ReportCreator: OK
-%%ReportCreator->>+AttachmentStore: GET /internal/attachments/groups/{group_id}/{attachment_id}  (id)
-%%AttachmentStore->>-ReportCreator: OK (attachment)
-%%ReportCreator->>-ApiGateway: OK (pdf)
-%%ApiGateway->>-Client: OK (pdf)
-%%
-%%Client->>+ApiGateway: GET /external/download-csv-report/{group_id}/{report_id} (token)
-%%ApiGateway->>+ReportCreator: GET /external/download-csv-report/{group_id}/{report_id} (id)
-%%ReportCreator->>+GroupManager: GET /internal/groups?user_id=val 
-%%GroupManager->>-ReportCreator: OK
-%%ReportCreator->>+AttachmentStore: GET /internal/attachments/groups/{group_id}/{attachment_id}  (id)
-%%AttachmentStore->>-ReportCreator: OK (attachment)
-%%ReportCreator->>-ApiGateway: OK (csv)
-%%ApiGateway->>-Client: OK (csv)
 ```
 
 ## Attachment Store
