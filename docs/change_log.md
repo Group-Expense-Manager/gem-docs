@@ -57,3 +57,4 @@
 * Implementacja gem-lib i service-template (ostatnie poprawki)
 * Implementacja authenticatora, email-sendera, attachment-store'a
 * Testowanie Kubernetesa jako orchestratora
+* Tworzenie Api Gateway'a

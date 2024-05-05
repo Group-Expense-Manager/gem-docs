@@ -48,6 +48,40 @@ Rel(ServiceC,DBC, "Reads from & writes to")
 UpdateRelStyle(ServiceC, DBC, $offsetY="-15", $offsetX="-70")
 ```
 
+### System C4 Diagram v2
+``` mermaid
+C4Component
+
+Person(User, "Użytkownik")
+
+Boundary(system_boundary, "System","") {
+      Boundary(user_boundary, "Urządzenie Mobilne", "") {
+
+  Component(MobileApp, "Aplikacja Mobilna")
+  }
+  Boundary(cluster_boundary, "Klaster Kubernetesa", "") {
+
+    Component(Microservices, "Mikroserwisy")
+  }
+
+Boundary(db_boundary, "MongoDB Cloud", "") {
+    ComponentDb(DB, "Bazy Danych")
+
+  }
+
+}
+
+Rel(User, MobileApp, "używa")
+UpdateRelStyle(User, MobileApp, $offsetY="-45", $offsetX="-5")
+Rel(MobileApp, Microservices, "Wysyła żądania")
+UpdateRelStyle(MobileApp, Microservices, $offsetY="-13", $offsetX="-50")
+
+Rel(Microservices,DB, "Dostęp do danych")
+UpdateRelStyle(Microservices, DB, $offsetY="-15", $offsetX="-50")
+
+UpdateLayoutConfig($c4ShapeInRow="1", $c4BoundaryInRow="3")
+```
+
 ## Authenticator
 ``` mermaid
 sequenceDiagram
