@@ -52,9 +52,15 @@
 * Diagram komunikacji między-mikroserwisowej
 ### 22.04.2024 - 28.04.2024
 * Tworzenie kontraktu dla każdego mikroserwisu
-### 29.04.2024 - 05.04.2024
+### 29.04.2024 - 05.05.2024
 * Tworzenie kontraktu dla każdego mikroserwisu
 * Implementacja gem-lib i service-template (ostatnie poprawki)
 * Implementacja authenticatora, email-sendera, attachment-store'a
 * Testowanie Kubernetesa jako orchestratora
+## Maj 2024
+### 06.05.2024 - 12.05.2024
+* Tworzenie Api Gateway'a
+* Tworzenie mocków frontendów - komponenty + pierwsze widoki
+* Poprawki do authenticatora, email-sendera
+### 13.05.2024 - 19.05.2024
 * Tworzenie Api Gateway'a
