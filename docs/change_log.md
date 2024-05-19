@@ -60,7 +60,10 @@
 ## Maj 2024
 ### 06.05.2024 - 12.05.2024
 * Tworzenie Api Gateway'a
-* Tworzenie mocków frontendów - komponenty + pierwsze widoki
+* Tworzenie mocków frontendu - komponenty + pierwsze widoki
 * Poprawki do authenticatora, email-sendera
 ### 13.05.2024 - 19.05.2024
 * Tworzenie Api Gateway'a
+* Tworzenie Expense Manager'a
+* Tworzenie Group Manager'a
+* Tworzenie mockow frontendu
