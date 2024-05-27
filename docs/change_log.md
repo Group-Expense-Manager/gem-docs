@@ -64,6 +64,12 @@
 * Poprawki do authenticatora, email-sendera
 ### 13.05.2024 - 19.05.2024
 * Tworzenie Api Gateway'a
-* Tworzenie Expense Manager'a
-* Tworzenie Group Manager'a
+* Tworzenie Expense Managera
+* Tworzenie Group Managera
 * Tworzenie mockow frontendu
+### 20.05.2024 - 26.05.2024
+* Tworzenie Expense Managera
+* Tworzenie Group Managera
+* Tworzenie mockow frontendu
+* Tworzenie Currency Managera
+
