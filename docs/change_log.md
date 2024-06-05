@@ -66,10 +66,15 @@
 * Tworzenie Api Gateway'a
 * Tworzenie Expense Managera
 * Tworzenie Group Managera
-* Tworzenie mockow frontendu
+* Tworzenie mocków frontendu
 ### 20.05.2024 - 26.05.2024
 * Tworzenie Expense Managera
 * Tworzenie Group Managera
 * Tworzenie mockow frontendu
 * Tworzenie Currency Managera
+### 27.05.2024 - 02.06.2024
+* Tworzenie mocków
+## Czerwiec 2024
+### 03.06.2024 - 09.06.2024
+* Tworzenie mocków
 
