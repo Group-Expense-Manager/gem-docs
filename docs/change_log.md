@@ -77,4 +77,20 @@
 ## Czerwiec 2024
 ### 03.06.2024 - 09.06.2024
 * Tworzenie mocków
+### 10.06.2024 - 16.06.2024
+* Tworzenie mocków
+* Tworzenie frontendu - autentykacja
+### 17.06.2024 - 23.06.2024
+* Tworzenie frontendu - grupy, wydatki
+* Postawienie backendu na klastrze k8s
+* Konsultacje z opiekunem, przedstawienie stopnia zaawansowania pracy
+### 24.06.2024 - 30.06.2024
+* Implementacja UserDetailsManager
+## Lipiec 2024
+### 01.06.2024 - 07.06.2024
+* Implementacja UserDetailsManagera, Authentykatora
+### 08.06.2024 - 14.06.2024
+* Implementacja ExpenseManagera,
 
+
+  
