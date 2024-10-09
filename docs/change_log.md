@@ -128,6 +128,8 @@
 ## Wrzesień 2024
 ### 02.09.2024 - 08.09.2024
 * Stworzenie komponentów frontedoowych
+* Modyfikacja makiet fronetendowych
+* Analiza i reorganizacja planu dalszych prac
 * Stworzenie widoków dla zarządzania profilem i ustawieniami konta
 ### 09.09.2024 - 15.09.2024
 * Stworzenie komponentów frontedoowych
