@@ -157,3 +157,7 @@
 * Stworzenie widoków edycji płatności i wydatków
 * Poprawki w AttachmentStore
 * Przygotowanie aplikacji do buildu na Androida
+### 14.10.2024 - 20.10.2024
+* Pisanie drugiego rozdziału pracy inżynierskiej
+* Implementacja funkcjonalności generowania wyrównań w FinanceAdapterze
+* Stworzenie widoków bilansów i wyrównań
