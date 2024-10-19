@@ -159,5 +159,6 @@
 * Przygotowanie aplikacji do buildu na Androida
 ### 14.10.2024 - 20.10.2024
 * Pisanie drugiego rozdziału pracy inżynierskiej
+* Analiza i testowanie wydajnościowe algorytmów do generowania wyrównań
 * Implementacja funkcjonalności generowania wyrównań w FinanceAdapterze
 * Stworzenie widoków bilansów i wyrównań
