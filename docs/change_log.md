@@ -162,3 +162,9 @@
 * Analiza i testowanie wydajnościowe algorytmów do generowania wyrównań
 * Implementacja funkcjonalności generowania wyrównań w FinanceAdapterze
 * Stworzenie widoków bilansów i wyrównań
+### 21.10.2024 - 27.10.2024
+* Refaktoryzacja pobierania bilansów w GroupManagerze
+* Implementacja ReportCreatora
+* Implementacja widokoków wyrównań i bilansów 
+* Przygotowanie prezentacji na pp2
+* Ostatnie poprawki do drugiego rozdziału pracy inżynierskiej
