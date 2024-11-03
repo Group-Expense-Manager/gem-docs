@@ -2,50 +2,65 @@
 
 ### System C4 Diagram
 ``` mermaid
+
 C4Component
 
-Person(User, "User")
+
+Boundary(Person, "","") {
+    Person(User, "Użytkownik")
+
+}
 
 Boundary(system_boundary, "System","") {
     
-  Component(MobileApp, "Mobile App")
-  Boundary(cluster_boundary, "Cluster", "") {
-    Boundary("public_boundary","Public","") {
+  Component(MobileApp, "Aplikacja mobilna")
+  Boundary(cluster_boundary, "Klaster", "") {
+    Boundary("public_boundary","Sieć publiczna","") {
         Component(ApiGateway, "Api Gateway")
     }
-    Boundary("private_boundary","Private","") {
-        Component(ServiceA, "Service A")
-        Component(ServiceB, "Service B")
-        Component(ServiceC, "Service C")
+    Boundary("private_boundary","Sieć prywatna","") {
+        Component(ServiceA, "Serwis A")
+        Component(ServiceB, "Serwis B")
+        Component(ServiceC, "Serwis C")
     }
 
 
   }
 
-Boundary(db_boundary, "DB", "") {
-    ComponentDb(DBA, "Data Base A")
-    ComponentDb(DBB, "Data Base B")
-    ComponentDb(DBC, "Data Base C")
+Boundary(db_boundary, "Bazy danych", "") {
+    ComponentDb(DBA, "Baza danych A")
+    ComponentDb(DBB, "Baza danych B")
+    ComponentDb(DBC, "Baza danych C")
   }
 
 }
 
-Rel(User, MobileApp, "Uses")
-UpdateRelStyle(User, MobileApp, $offsetY="15", $offsetX="10")
-Rel(MobileApp, ApiGateway, "Makes api calls to")
-UpdateRelStyle(MobileApp, ApiGateway, $offsetY="-0", $offsetX="-65")
-Rel(ApiGateway, ServiceA, "Makes api calls to")
+
+
+Rel(User, MobileApp, "Używa")
+UpdateRelStyle(User, MobileApp, $offsetY="-10", $offsetX="-17")
+Rel(MobileApp, ApiGateway, "Wysyła żądania")
+UpdateRelStyle(MobileApp, ApiGateway, $offsetY="-50", $offsetX="-65")
+Rel(ApiGateway, ServiceA, "Przekazuje żądania")
 UpdateRelStyle(ApiGateway, ServiceA, $offsetY="-10", $offsetX="-50")
-Rel(ApiGateway, ServiceB, "Makes api calls to")
+Rel(ApiGateway, ServiceB, "Przekazuje żądania")
 UpdateRelStyle(ApiGateway, ServiceB, $offsetY="10", $offsetX="-50")
-Rel(ApiGateway, ServiceC, "Makes api calls to")
+Rel(ApiGateway, ServiceC, "Przekazuje żądania")
 UpdateRelStyle(ApiGateway, ServiceC, $offsetY="20", $offsetX="-80")
-Rel(ServiceA,DBA, "Reads from & writes to")
+
+Rel(ServiceA,ServiceB, "Wysyła żądania")
+UpdateRelStyle(ServiceA, ServiceB, $offsetY="-15", $offsetX="-42")
+Rel(ServiceB,ServiceC, "Wysyła żądania")
+UpdateRelStyle(ServiceB, ServiceC, $offsetY="-15", $offsetX="-42")
+
+
+Rel(ServiceA,DBA, "Odczytuje i zapisuje dane")
 UpdateRelStyle(ServiceA, DBA, $offsetY="-15", $offsetX="-70")
-Rel(ServiceB,DBB, "Reads from & writes to")
+Rel(ServiceB,DBB, "Odczytuje i zapisuje dane")
 UpdateRelStyle(ServiceB, DBB, $offsetY="-15", $offsetX="-70")
-Rel(ServiceC,DBC, "Reads from & writes to")
+Rel(ServiceC,DBC, "Odczytuje i zapisuje dane")
 UpdateRelStyle(ServiceC, DBC, $offsetY="-15", $offsetX="-70")
+
 ```
 
 ### System C4 Diagram v2
