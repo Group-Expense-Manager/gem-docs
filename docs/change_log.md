@@ -168,3 +168,7 @@
 * Implementacja widokoków wyrównań i bilansów 
 * Przygotowanie prezentacji na pp2
 * Ostatnie poprawki do drugiego rozdziału pracy inżynierskiej
+### 28.10.2024 - 3.11.2024
+* Pisanie trzeciego rozdziału pracy inżynierskiej
+* Dodawanie funkcjonalności usuwania grupy na frotendzie
+* Implementacja asynchronicznych zadania w ReportCreatorze
