@@ -177,3 +177,8 @@
 * Poprawki błędów przy generowaniu raportu
 * Pisanie trzciego rozdziału pracy inżynierskiej
 * Konsultacje w ramach PP2
+### 11.11.2024
+* Poprawki błędów przy generowaniu raportu
+* Pisanie trzciego rozdziału pracy inżynierskiej
+* Prace nad filtrowaniem aktywności na frontendzie
+* Tworzenie komponentu kalendarza
