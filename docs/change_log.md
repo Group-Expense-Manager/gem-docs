@@ -182,3 +182,8 @@
 * Pisanie trzciego rozdziału pracy inżynierskiej
 * Prace nad filtrowaniem aktywności na frontendzie
 * Tworzenie komponentu kalendarza
+### 18.11.2024 - 24.11.2024
+* Konsultacje opiekunem / klientem - prezentacja finalnej wersji produkt
+* Pisanie 3 i 4 rozdziału pracy inżynierskiej
+* poprawki w FinanceAdapterze
+* dodanie dependabota do repozytoriów
