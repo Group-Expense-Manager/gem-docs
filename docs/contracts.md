@@ -6,6 +6,7 @@
 classDiagram
 class NotVerifiedUser {
     id: String
+    username: String,
     email: String
     password: String
     createdAt: Date
@@ -17,8 +18,12 @@ class VerifiedUser {
     id: String
     email: String
     password: String
-    passwordRecoveryCode: String
-    passwordRecoveryEmailSentAt: Date?
+}
+
+class PasswordRecoveryCode {
+    val userId: String,
+    val code: String,
+    val createdAt: Date,
 }
 
 ```
@@ -192,6 +197,9 @@ class UserDetails {
     username: String
     firstname: String?
     lastname: String?
+    phoneNumber: String?
+    bankAccountNumber: String?
+    preferredPaymentMethod: String
     attachmentId: String
 }
 
@@ -250,14 +258,21 @@ classDiagram
     class Group {
         id: String
         name: String
-        colour: Number
-        owner: String
+        ownerId: String
         members: String[]
-        acceptRequired: Boolean
-        baseCurrencies: String[]
+        groupCurrencies: String[]
         joinCode: String
         attachmentId: String
-        
+    }
+
+    class ArchivedGroup {
+        id: String
+        name: String
+        ownerId: String
+        members: String[]
+        groupCurrencies: String[]
+        joinCode: String
+        attachmentId: String
     }
 ```
 
@@ -358,31 +373,55 @@ classDiagram
         groupId: String
         creatorId: String
         title: String
-        attachmentId: String
-        fullCost: Number
-        currency: String
-        targetCurrency: String?
-        exchangeRate: Number?
+        amount: Amount
+        fxData: FxData?
         createdAt: Date
+        updatedAt: Date
         expenseDate: Date
+        attachmentId: String?
         expenseParticipants: ExpenseParticipant[]
         status: "ACCEPTED" | "REJECTED" | "PENDING"
-        statusHistory: StatusHistory[]
-        updatedAt: Date
+        history: ExpenseHistoryEntry[]
+    }
+    
+    class Amount {
+        value: Number
+        currency: String
+    }
+    
+    class FxData {
+        targetCurrency: String
+        exchangeRate: Number
     }
     
     class ExpenseParticipant {
-        userId: String
-        cost: Number
-        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        participantId: String
+        participantCost: Number
+        participantStatus: "ACCEPTED" | "REJECTED" | "PENDING"
     }
     
-    class StatusHistory {
-        userId: String
-        action: "ACCEPTED" | "REJECTED" | "CREATED" | "EDITED" | "DELETED"
-        date: Date
+    class ExpenseHistoryEntry {
+        participantId: String
+        expenseAction: "ACCEPTED" | "REJECTED" | "CREATED" | "EDITED" | "DELETED"
+        createdAt: Date
         comment: String?
     }
+    class ArchivedExpense {
+        id: String
+        groupId: String
+        creatorId: String
+        title: String
+        amount: Amount
+        fxData: FxData?
+        createdAt: Date
+        updatedAt: Date
+        expenseDate: Date
+        attachmentId: String?
+        expenseParticipants: ExpenseParticipant[]
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        history: ExpenseHistoryEntry[]
+    }
+    
 
 ```
 
@@ -505,7 +544,6 @@ sequenceDiagram
 ```
 
 ## Payment Manager
-
 ```mermaid
 classDiagram
     class Payment {
@@ -513,25 +551,52 @@ classDiagram
         groupId: String
         creatorId: String
         recipientId: String
-        title: Stringreport
+        title: String
         type: "CASH" | "BANK_TRANSFER" | "MOBILE_PAYMENT" | "OTHER"
-        attachmentId: String
-        sum: Number
-        currency: String
-        targetCurrency: String?
-        exchangeRate: String?
-        createdAt: Date
-        status: "ACCEPTED" | "REJECTED" | "PENDING"
-        statusHistory: StatusHistory[]
-        updatedAt: Date
-    }
-
-    class StatusHistory {
-        userId: String
-        action: "ACCEPTED" | "REJECTED" | "CREATED" | "EDITED" | "DELETED"
+        amount: Amount
+        fxData: FxData?
         date: Date
+        createdAt: Date
+        updatedAt: Date
+        attachmentId: String?
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        history: PaymentHistoryEntry[]
+    }
+    
+    class Amount {
+        value: Number
+        currency: String
+    }
+    
+    class FxData {
+        targetCurrency: String
+        exchangeRate: Number
+    }
+    
+    class PaymentHistoryEntry {
+        participantId: String
+        expenseAction: "ACCEPTED" | "REJECTED" | "CREATED" | "EDITED" | "DELETED"
+        createdAt: Date
         comment: String?
     }
+    class ArchivedPayment {
+        id: String
+        groupId: String
+        creatorId: String
+        recipientId: String
+        title: String
+        type: "CASH" | "BANK_TRANSFER" | "MOBILE_PAYMENT" | "OTHER"
+        amount: Amount
+        fxData: FxData?
+        date: Date
+        createdAt: Date
+        updatedAt: Date
+        attachmentId: String?
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        history: PaymentHistoryEntry[]
+    }
+    
+
 ```
 
 ```mermaid
@@ -658,7 +723,43 @@ sequenceDiagram
 
 
 ## Finance Adapter
+```mermaid
+classDiagram
+    class Balances {
+        id: BalancesCompositeKey
+        balances: Balance[]
+    }
+    
+    class BalancesCompositeKey {
+        groupId: String
+        currency: String
+    }
+    
+    class Balance {
+        userId: String
+        balance: Number
+    }
+```
 
+```mermaid
+classDiagram
+    class Settlements {
+        id: SettlementsCompositeKey
+        status: "PENDING" | "SAVED"
+        settlements: Settlement[]
+    }
+    
+    class SettlementsCompositeKey {
+        groupId: String
+        currency: String
+    }
+    
+    class Settlement {
+        fromUserId: String
+        toUserId: String
+        value: Number
+    }
+```
 ```mermaid
 sequenceDiagram
     participant Client
@@ -714,9 +815,10 @@ classDiagram
     class Report {
         id: String
         groupId: String
+        format: "PDF" | "XLSX"
+        creatorId: String
         createdAt: Date
-        pdfAttachmentId: String
-        csvAttachmentId: String
+        attachmentId: String
     }
 ```
 
@@ -766,11 +868,13 @@ sequenceDiagram
 
 ```mermaid
 classDiagram
-    class ExchangeRateCache {
+    class ExchangeRate {
         currencyFrom: String
         currencyTo: String
+        rate: Number
         createdAt: Date
-        value: Value
+        forDate: Date
+        validTo: Date
     }
 ```
 
@@ -831,23 +935,24 @@ sequenceDiagram
 
 classDiagram
     class UserAttachment {
-    _id: ObjectId
+    id: String
     userId: String
     contentType: String
-    size: Number
-    data: BSON
+    sizeInBytes: Number
+    file: Binary
     createdAt: Date
     updatedAt: Date
     attachmentHistory: AttachmentHistory[]
     }
   
     class GroupAttachment {
-        _id: ObjectId
+        id: String
         groupId: String
         uploadedByUser: String
         contentType: String
-        size: Number
-        data: BSON
+        sizeInBytes: Number
+        file: Binary
+        strictAccess: Boolean
         createdAt: Date
         updatedAt: Date
         attachmentHistory: AttachmentHistory[]
@@ -856,7 +961,8 @@ classDiagram
     class AttachmentHistory {
         updateBy: String
         updatedAt: Date
-        size: Number
+        sizeInBytes: Number
+        contentType: String
     }
 ```
 
