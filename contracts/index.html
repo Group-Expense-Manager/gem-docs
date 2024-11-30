@@ -1,0 +1,1671 @@
+
+<!doctype html>
+<html lang="pl" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../change_log/">
+      
+      
+        <link rel="next" href="../diagrams/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+    
+    
+      
+        <title>Api Contracts - GEM Docks</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Api Contracts - GEM Docks" >
+      
+        <meta  property="og:description"  content="None" >
+      
+        <meta  property="og:image"  content="./assets/images/social/contracts.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="None" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Api Contracts - GEM Docks" >
+      
+        <meta  name="twitter:description"  content="None" >
+      
+        <meta  name="twitter:image"  content="./assets/images/social/contracts.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-contracts" class="md-skip">
+          Przejdź do treści
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Nagłówek">
+    <a href=".." title="GEM Docks" class="md-header__button md-logo" aria-label="GEM Docks" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GEM Docks
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Api Contracts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="cyan"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Zakładki" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Welcome GEM Docs
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../change_log/" class="md-tabs__link">
+        
+  
+    
+  
+  Change Log
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+    
+  
+  Api Contracts
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../diagrams/" class="md-tabs__link">
+        
+  
+    
+  
+  Diagrams
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../links/" class="md-tabs__link">
+        
+  
+    
+  
+  Links
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Nawigacja" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="GEM Docks" class="md-nav__button md-logo" aria-label="GEM Docks" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    GEM Docks
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Welcome GEM Docs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../change_log/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Change Log
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Api Contracts
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Api Contracts
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Spis treści">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Spis treści
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#authenticator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authenticator
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#email-sender" class="md-nav__link">
+    <span class="md-ellipsis">
+      Email Sender
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-details-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      User Details Manager
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Group Manager
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#expense-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Expense Manager
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#payment-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Payment Manager
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finance-adapter" class="md-nav__link">
+    <span class="md-ellipsis">
+      Finance Adapter
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#report-creator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Report Creator
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#currency-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Currency Manager
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attachment-store" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attachment Store
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagrams/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Diagrams
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../links/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Links
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="api-contracts">Api Contracts</h1>
+<h2 id="authenticator">Authenticator</h2>
+<pre class="mermaid"><code>classDiagram
+class NotVerifiedUser {
+    id: String
+    username: String,
+    email: String
+    password: String
+    createdAt: Date
+    code: String
+    codeUpdatedAt: Date
+}
+
+class VerifiedUser {
+    id: String
+    email: String
+    password: String
+}
+
+class PasswordRecoveryCode {
+    val userId: String,
+    val code: String,
+    val createdAt: Date,
+}
+</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+
+    participant Client
+    participant Authenticator
+
+    Client-&gt;&gt;Authenticator: Register POST /open/register
+    Note over Client,Authenticator:Body: {&lt;br&gt;email: String &lt;br&gt; password: String&lt;br&gt;}
+    Authenticator-&gt;&gt;Authenticator:Validate body
+    alt Body is Valid
+        Authenticator-&gt;&gt;Authenticator:Check if email is not taken
+        alt Email is not taken
+            Authenticator-&gt;&gt;Authenticator:Register user
+            Authenticator-&gt;&gt;Client: 201 Created
+        else Email is taken
+            Authenticator-&gt;&gt;Client: 409 Conflict
+        end
+    else Body is not Valid
+        Authenticator-&gt;&gt;Client: 400 Bad Request
+    end
+
+    Client-&gt;&gt;Authenticator: Login POST /open/login
+    Note over Client,Authenticator: Body: {&lt;br&gt;email: String &lt;br&gt; password: String&lt;br&gt;}
+    Authenticator-&gt;&gt;Authenticator:Authenticate
+    alt Successfully authenticated
+    Authenticator-&gt;&gt;Authenticator:Create token
+    Authenticator-&gt;&gt;Client: 200 OK
+    Note over Client,Authenticator: Body: token: String
+
+    else User is not verified
+        Authenticator-&gt;&gt;Client: 403 Forbidden
+    else Bad credentials
+        Authenticator-&gt;&gt;Client: 403 Forbidden
+    end
+
+
+    Client-&gt;&gt;Authenticator: Verify user POST /open/verify
+    Note over Client,Authenticator:Body: {&lt;br&gt;email: String &lt;br&gt; code: String&lt;br&gt;}
+    Authenticator-&gt;&gt;Authenticator: Check if not verified user exists
+    alt User exists
+        Authenticator-&gt;&gt;Authenticator: Check code
+        alt Code is correct
+            Authenticator-&gt;&gt;Authenticator: Verify user
+            Authenticator-&gt;&gt;Client: 200 OK
+            Note over Client,Authenticator: Body: token: String
+        else Code is not correct
+            Authenticator-&gt;&gt;Client: 400 Bad Request
+        end
+    else User does not exist
+    Authenticator-&gt;&gt;Client: 404 Not found
+    end
+
+    Client-&gt;&gt;Authenticator: Send verification email POST /open/send-verification-email
+    Note over Client,Authenticator:Body: {&lt;br&gt;email: String&lt;br&gt;}
+    Authenticator-&gt;&gt;Authenticator: Check if not verified user exists
+    alt User exists
+        Authenticator-&gt;&gt;Authenticator: Check if email was recently sent
+        alt Email wasn't recently sent
+            Authenticator-&gt;&gt;Authenticator: Generate code &amp; send verification email
+            Authenticator-&gt;&gt;Client: 200 OK
+        else Email was recently sent
+            Authenticator-&gt;&gt;Client: 429 Too many requests
+        end
+    else User does not exist
+        Authenticator-&gt;&gt;Client: 404 Not found
+    end
+
+
+
+
+    Client-&gt;&gt;Authenticator: Send password-recovery email POST /open/recover-password
+    Note over Client,Authenticator:Body: {&lt;br&gt;email: String&lt;br&gt;}
+    Authenticator-&gt;&gt;Authenticator: Check if verified user exists
+    alt User exists
+        Authenticator-&gt;&gt;Authenticator: Check if email was recently sent
+        alt Email wasn't recently sent
+            Authenticator-&gt;&gt;Authenticator: send password-recovery email
+            Authenticator-&gt;&gt;Client: 200 OK
+        else Email was recently sent
+            Authenticator-&gt;&gt;Client: 429 Too many requests
+        end
+    else User does not exist
+    Authenticator-&gt;&gt;Client: 404 Not found
+    end
+
+    Client-&gt;&gt;Authenticator: Send new password by email POST /open/send-password
+    Note over Client,Authenticator:RequestParams: {&lt;br&gt;email: String&lt;br&gt;code: String&lt;br&gt;}
+    Authenticator-&gt;&gt;Authenticator: Check if not verified user exists
+    alt User exists
+        Authenticator-&gt;&gt;Authenticator: Check code
+        alt Code is correct
+            Authenticator-&gt;&gt;Authenticator: Generate &amp; send new password by email
+            Authenticator-&gt;&gt;Client: 200 OK
+        else Code is not correct
+            Authenticator-&gt;&gt;Client: 400 Bad Request
+        end
+    else User does not exist
+        Authenticator-&gt;&gt;Client: 404 Not found
+    end
+
+    Client-&gt;&gt;Authenticator: Change password POST /external/change-password
+    Note over Client,Authenticator:token-validated: TOKEN&lt;br&gt;Body: {&lt;br&gt;oldPassword: String&lt;br&gt;newPassword: String&lt;br&gt;}
+    Authenticator-&gt;&gt;Authenticator: Validate body
+    alt Body is Valid
+        Authenticator-&gt;&gt;Authenticator: Check if user exists
+        alt User exists
+            Authenticator-&gt;&gt;Authenticator: Check if old password is correct
+            alt Password is correct
+                Authenticator-&gt;&gt;Authenticator: Update password
+                Authenticator-&gt;&gt;Client: 200 OK
+            else Password is not correct
+                Authenticator-&gt;&gt;Client: 400 Bad Request
+            end
+
+        else User does not exist
+            Authenticator-&gt;&gt;Client: 404 Not found
+        end
+    else Body is not Valid
+        Authenticator-&gt;&gt;Client: 400 Bad Request
+    end</code></pre>
+<h2 id="email-sender">Email Sender</h2>
+<pre class="mermaid"><code>sequenceDiagram
+
+    participant Client
+    participant EmailSender
+
+    Client-&gt;&gt;EmailSender: Send verification email POST /internal/verification
+    Note over Client,EmailSender:Body: {&lt;br&gt;email: String &lt;br&gt; code: String&lt;br&gt;}
+    EmailSender-&gt;&gt;EmailSender:Send verification email
+    EmailSender-&gt;&gt;Client: 200 OK
+
+    Client-&gt;&gt;EmailSender: Send password-recovery email POST /internal/password-recovery
+    Note over Client,EmailSender:Body: {&lt;br&gt;email: String &lt;br&gt; link: String&lt;br&gt;}
+    EmailSender-&gt;&gt;EmailSender:Send password-recovery email
+    EmailSender-&gt;&gt;Client: 200 OK
+
+
+    Client-&gt;&gt;EmailSender: Send new password by email POST /internal/password
+    Note over Client,EmailSender:Body: {&lt;br&gt;email: String &lt;br&gt; password: String&lt;br&gt;}
+    EmailSender-&gt;&gt;EmailSender:Send new password
+    EmailSender-&gt;&gt;Client: 200 OK
+
+    Client-&gt;&gt;EmailSender: Send report POST /internal/report
+    Note over Client,EmailSender:Body: {&lt;br&gt;email: String &lt;br&gt; attachmentId: String&lt;br&gt;}
+    EmailSender-&gt;&gt;EmailSender: Download report from Attachment Store
+    alt Report downloaded successfully
+        EmailSender-&gt;&gt;EmailSender:  send mail with report
+        EmailSender-&gt;&gt;Client: 200 OK
+    else Failed to download report
+        EmailSender-&gt;&gt;Client: 400 Bad Request
+    end
+</code></pre>
+<h2 id="user-details-manager">User Details Manager</h2>
+<pre class="mermaid"><code>classDiagram
+
+class UserDetails {
+    id: String
+    username: String
+    firstname: String?
+    lastname: String?
+    phoneNumber: String?
+    bankAccountNumber: String?
+    preferredPaymentMethod: String
+    attachmentId: String
+}
+</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+
+    participant Client
+    participant UserDetailsManager
+
+    Client-&gt;&gt;UserDetailsManager: Create user details POST /internal/user-details/{user_id}
+    Note over Client,UserDetailsManager: Body: {&lt;br&gt;email: String &lt;br&gt;}
+    UserDetailsManager-&gt;&gt;UserDetailsManager: Create user details
+    UserDetailsManager-&gt;&gt;Client: 201 Created
+
+    Client-&gt;&gt;UserDetailsManager: Change user details PUT /external/user-details
+    Note over Client,UserDetailsManager: token-validated: TOKEN&lt;br&gt; Body: {&lt;br&gt;username: String &lt;br&gt;firstname: String &lt;br&gt;lastname: String &lt;br&gt;}
+    UserDetailsManager-&gt;&gt;UserDetailsManager: Validate body
+    alt Body is valid
+        UserDetailsManager-&gt;&gt;UserDetailsManager: Change user details
+        UserDetailsManager-&gt;&gt;Client: 200 OK
+    else Body is not valid
+        UserDetailsManager-&gt;&gt;Client: 400 Bad Request
+    end
+
+
+    Client-&gt;&gt;UserDetailsManager: get user details GET /external/user-details
+    Note over Client,UserDetailsManager: token-validated: TOKEN
+    UserDetailsManager-&gt;&gt;UserDetailsManager: Get user details
+    UserDetailsManager-&gt;&gt;Client: 200 OK
+    Note over Client,UserDetailsManager:&lt;br&gt; Body: {&lt;br&gt;username: String &lt;br&gt;firstname: String? &lt;br&gt;lastname: String? &lt;br&gt;attachmentId: String?&lt;br&gt;}
+
+    Client-&gt;&gt;UserDetailsManager: get user details of group members GET /external/user-details/{group_id}
+    Note over Client,UserDetailsManager: token-validated: TOKEN
+    UserDetailsManager-&gt;&gt;UserDetailsManager: Check if user is a group member
+    alt User is a group member
+        UserDetailsManager-&gt;&gt;UserDetailsManager: Get user details of group members
+        UserDetailsManager-&gt;&gt;Client: 200 OK
+        Note over Client,UserDetailsManager:&lt;br&gt; Body: {&lt;br&gt; userDetails: UserDetails[] &lt;br&gt;}
+    else User is not a group member
+        UserDetailsManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;UserDetailsManager: get user details of group members GET /internal/user-details/{group_id}
+    UserDetailsManager-&gt;&gt;UserDetailsManager: Get user details of group members
+    UserDetailsManager-&gt;&gt;Client: 200 OK
+    Note over Client,UserDetailsManager:&lt;br&gt; Body: {&lt;br&gt; userDetails: UserDetails[] &lt;br&gt;}
+</code></pre>
+<h2 id="group-manager">Group Manager</h2>
+<pre class="mermaid"><code>classDiagram
+    class Group {
+        id: String
+        name: String
+        ownerId: String
+        members: String[]
+        groupCurrencies: String[]
+        joinCode: String
+        attachmentId: String
+    }
+
+    class ArchivedGroup {
+        id: String
+        name: String
+        ownerId: String
+        members: String[]
+        groupCurrencies: String[]
+        joinCode: String
+        attachmentId: String
+    }</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Client
+    participant GroupManager
+
+    Client-&gt;&gt;GroupManager: Create group POST /external/groups
+    Note over Client,GroupManager:token-validated: TOKEN&lt;br&gt; Body: {&lt;br&gt;name: String&lt;br&gt; colour: Number&lt;br&gt; acceptRequired: Boolean &lt;br&gt; baseCurrencies: String[] &lt;br&gt; attachmentId: String &lt;br&gt;}&lt;br&gt;
+    GroupManager-&gt;&gt;GroupManager:validate Body
+    alt Body is valid
+        GroupManager-&gt;&gt;GroupManager: Check if currency is available
+        alt Currency is available
+            GroupManager-&gt;&gt;GroupManager: Create group
+            GroupManager-&gt;&gt;Client: 201 Created
+            Note over GroupManager,Client: Body: {&lt;br&gt;groupId: String,&lt;br&gt;}
+
+        else Currency is not available
+            GroupManager-&gt;&gt;Client: 400 Bad Request
+        end
+    else Body is not valid
+        GroupManager-&gt;&gt;Client: 400 Bad Request
+    end
+
+    Client-&gt;&gt;GroupManager: Delete group DELETE /external/groups/{group_id}
+    Note over Client,GroupManager:token-validated: TOKEN
+    GroupManager-&gt;&gt;GroupManager: Check if user is owner of the group
+    alt User is owner of the group
+        GroupManager-&gt;&gt;GroupManager:Check if group balance is equal to 0
+        alt group balance == 0
+            GroupManager-&gt;&gt;GroupManager: Delete group
+            GroupManager-&gt;&gt;Client: 200 OK
+        else group balance != 0
+            GroupManager-&gt;&gt;Client: 422 Unprocessable Content
+        end
+    else User is not owner of the group
+        GroupManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;GroupManager: Edit group PUT /external/groups/{group_id}
+    Note over Client,GroupManager:token-validated: TOKEN&lt;br&gt; Body: {&lt;br&gt;name: String&lt;br&gt; colour: Number&lt;br&gt; }&lt;br&gt;
+
+    GroupManager-&gt;&gt;GroupManager: Check if user is owner of the group
+    alt User is owner of the group
+        GroupManager-&gt;&gt;GroupManager: Edit group data
+        GroupManager-&gt;&gt;Client: 200 OK
+    else User is not owner of the group
+        GroupManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+
+    Client-&gt;&gt;GroupManager: Get group data GET /external/groups/{group_id}
+    Note over Client,GroupManager:token-validated: TOKEN
+    GroupManager-&gt;&gt;GroupManager: Check if user is a group member
+    alt User is a group member
+        GroupManager-&gt;&gt;GroupManager: Get group data
+        GroupManager-&gt;&gt;Client: 200 OK
+        Note over GroupManager,Client:Body: {&lt;br&gt;name: String&lt;br&gt; colour: Number&lt;br&gt; owner: String &lt;br&gt; members: String[] &lt;br&gt; acceptRequired: Boolean &lt;br&gt; baseCurrencies: String[] &lt;br&gt; joinCode:String &lt;br&gt; attachmentId: String&lt;br&gt;}&lt;br&gt;
+    else User is not a group member
+        GroupManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;GroupManager: Get user's groups basic data GET /external/groups
+    Note over Client,GroupManager:token-validated: TOKEN
+    GroupManager-&gt;&gt;GroupManager: Get user's groups basic data
+    GroupManager-&gt;&gt;Client: 200 OK
+    Note over GroupManager,Client:Body: {&lt;br&gt; userGroupsBasicData: UserGroupsBasicData &lt;br&gt;}
+
+    Client-&gt;&gt;GroupManager: GET members ids GET /internal/members/{group_id}
+    GroupManager-&gt;&gt;GroupManager: Get members ids
+    GroupManager-&gt;&gt;Client: 200 OK
+    Note over GroupManager,Client:Body: {&lt;br&gt; memberIds: MemberIds&lt;br&gt;}
+
+    Client-&gt;&gt;GroupManager: Get group data GET /internal/groups/{group_id}
+    GroupManager-&gt;&gt;GroupManager: Get group data
+    GroupManager-&gt;&gt;Client: 200 OK
+    Note over GroupManager,Client:Body: {&lt;br&gt;members: String[]&lt;br&gt; acceptRequired: Boolean &lt;br&gt; baseCurrencies: String[]&lt;br&gt;}&lt;br&gt;
+
+    Client-&gt;&gt;GroupManager: Join group POST /external/join
+    Note over Client,GroupManager:token-validated: TOKEN &lt;br&gt; Body: { &lt;br&gt; code: String &lt;br&gt; } &lt;br&gt;
+    GroupManager-&gt;&gt;GroupManager: Check if code is correct
+    alt Code is correct
+        GroupManager-&gt;&gt;GroupManager: Add user to the group
+        GroupManager-&gt;&gt;Client: 200 OK
+    else Code is not correctcurrencies
+        GroupManager-&gt;&gt;Client: 400 Bad Request
+    end
+</code></pre>
+<h2 id="expense-manager">Expense Manager</h2>
+<pre class="mermaid"><code>classDiagram
+    class Expense {
+        id: String
+        groupId: String
+        creatorId: String
+        title: String
+        amount: Amount
+        fxData: FxData?
+        createdAt: Date
+        updatedAt: Date
+        expenseDate: Date
+        attachmentId: String?
+        expenseParticipants: ExpenseParticipant[]
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        history: ExpenseHistoryEntry[]
+    }
+
+    class Amount {
+        value: Number
+        currency: String
+    }
+
+    class FxData {
+        targetCurrency: String
+        exchangeRate: Number
+    }
+
+    class ExpenseParticipant {
+        participantId: String
+        participantCost: Number
+        participantStatus: "ACCEPTED" | "REJECTED" | "PENDING"
+    }
+
+    class ExpenseHistoryEntry {
+        participantId: String
+        expenseAction: "ACCEPTED" | "REJECTED" | "CREATED" | "EDITED" | "DELETED"
+        createdAt: Date
+        comment: String?
+    }
+    class ArchivedExpense {
+        id: String
+        groupId: String
+        creatorId: String
+        title: String
+        amount: Amount
+        fxData: FxData?
+        createdAt: Date
+        updatedAt: Date
+        expenseDate: Date
+        attachmentId: String?
+        expenseParticipants: ExpenseParticipant[]
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        history: ExpenseHistoryEntry[]
+    }
+
+</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Client
+    participant ExpenseManager
+
+    Client-&gt;&gt;ExpenseManager: Create Expense POST /external/expenses?group_id={group_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN&lt;br&gt; Body: { &lt;br&gt; title: String&lt;br&gt;attachmentId: String&lt;br&gt;fullCost: Number&lt;br&gt; currency: String&lt;br&gt; targetCurrency: String? &lt;br&gt; expenseDate: Date&lt;br&gt; membersWithCosts: MembersWithCosts &lt;br&gt;}
+    ExpenseManager-&gt;&gt;ExpenseManager:Validate body
+    alt Body is Valid
+        ExpenseManager-&gt;&gt;ExpenseManager: Check if user is a group member
+        alt User is a group member
+            ExpenseManager-&gt;&gt;ExpenseManager: Check if currency &amp; targetCurrency are available &amp; if targetCurrency is main
+            alt Currencies are available
+                ExpenseManager-&gt;&gt;ExpenseManager: Check if all participants are group members
+                alt All participants are group members
+                    ExpenseManager-&gt;&gt;ExpenseManager: Fetch exchange rate
+                    ExpenseManager-&gt;&gt;ExpenseManager: Create expense
+                    ExpenseManager-&gt;&gt;Client: 201 Created
+                    Note over ExpenseManager,Client: Body{&lt;br&gt; expenseId: String &lt;br&gt;}
+                else Not all participants are group members
+                    ExpenseManager-&gt;&gt;Client: 422 Unprocessable Content
+                end
+            else Currencies are not available
+                ExpenseManager-&gt;&gt;Client: 400 Bad Request
+            end
+        else User is not a group member
+            ExpenseManager-&gt;&gt;Client: 403 Forbidden
+        end
+    else Body is not valid
+    ExpenseManager-&gt;&gt;Client: 400 Bad Request
+    end
+
+    Client-&gt;&gt;ExpenseManager: Edit expense PUT /external/expenses/{expense_id}?group_id={group_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN&lt;br&gt; Body: { &lt;br&gt; title: String&lt;br&gt;fullCost: Number&lt;br&gt; currency: String&lt;br&gt; targetCurrency: String?&lt;br&gt; expenseDate: Date&lt;br&gt; membersWithCosts: MembersWithCosts &lt;br&gt;}
+    ExpenseManager-&gt;&gt;ExpenseManager:Validate body
+    alt Body is Valid
+        ExpenseManager-&gt;&gt;ExpenseManager: Check if user is an owner of the expense
+        alt User is an owner of the expense
+            ExpenseManager-&gt;&gt;ExpenseManager: Check if currency &amp; targetCurrency are available  &amp; if targetCurrency is main
+            alt Currencies are available
+                ExpenseManager-&gt;&gt;ExpenseManager: Check if all participants are group members
+                alt All participants are group members
+                    ExpenseManager-&gt;&gt;ExpenseManager: Fetch exchange rate
+                    ExpenseManager-&gt;&gt;ExpenseManager: Edit expense &amp; update statusHistory &amp; set all statuses to pending
+                    ExpenseManager-&gt;&gt;Client: 200 OK
+                else Not all participants are group members
+                    ExpenseManager-&gt;&gt;Client: 422 Unprocessable Content
+                end
+            else Currenceis are not available
+                ExpenseManager-&gt;&gt;Client: 400 Bad Request
+            end
+        else User is not an owner of the expense
+            ExpenseManager-&gt;&gt;Client: 403 Forbidden
+        end
+    else Body is not valid
+        ExpenseManager-&gt;&gt;Client: 400 Bad Request
+    end
+
+    Client-&gt;&gt;ExpenseManager: Delete expense DELETE /external/expenses/{expense_id}?group_id={group_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN
+    ExpenseManager-&gt;&gt;ExpenseManager: Check if user is an owner of the expense
+    alt User is an owner of the expense
+        ExpenseManager-&gt;&gt;ExpenseManager: Delete expense
+        ExpenseManager-&gt;&gt;Client: 200 OK
+    else User is not an owner of the expense
+        ExpenseManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;ExpenseManager: Get expense GET /external/expenses/{expense_id}?group_id={group_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN
+    ExpenseManager-&gt;&gt;ExpenseManager: Check if user is a group member
+    alt User is a group member
+        ExpenseManager-&gt;&gt;ExpenseManager: Get expense data
+        ExpenseManager-&gt;&gt;Client: 200 OK
+        Note over Client,ExpenseManager:&lt;br&gt; Body: { &lt;br&gt; id: String&lt;br&gt; creatorId: String &lt;br&gt; title: String&lt;br&gt;attachmentId: String&lt;br&gt;fullCost: Number&lt;br&gt; currency: String&lt;br&gt; targetCurrency: String?&lt;br&gt;exchangeRate: String?&lt;br&gt; expenseDate: Date &lt;br&gt; createdAt: Date &lt;br&gt; expenseParticipants: ExpenseParticipant[] &lt;br&gt; status: "ACCEPTED" | "REJECTED" | "PENDING" &lt;br&gt; statusHistory: StatusHistory[] &lt;br&gt;updatedAt: Date&lt;br&gt;}
+    else User is not a group member
+        ExpenseManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;ExpenseManager: Get expense GET /external/expenses?group_id={group_id}&amp;filters=val
+    Note over Client,ExpenseManager: token-validated: TOKEN
+    ExpenseManager-&gt;&gt;ExpenseManager: Check if user is a group member
+    alt User is a group member
+        ExpenseManager-&gt;&gt;ExpenseManager: Get filtered expenses
+        ExpenseManager-&gt;&gt;Client: 200 OK
+        Note over Client,ExpenseManager:&lt;br&gt; Body: { &lt;br&gt; expensesBasicData: ExpenseBasicData[] &lt;br&gt;}
+    else User is not a group member
+        ExpenseManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;ExpenseManager: Accept or reject expense POST /external/decide?group_id={group_id}&amp;expense_id={expense_id}
+    Note over Client,ExpenseManager: token-validated: TOKEN &lt;br&gt; Body: { &lt;br&gt; decision: "ACCEPT" | "REJECT" &lt;br&gt;comment: String&lt;br&gt;}
+    ExpenseManager-&gt;&gt;ExpenseManager:Validate body
+    alt Body is Valid
+        ExpenseManager-&gt;&gt;ExpenseManager: Check if user is an expense participant
+        alt User is an expense participant
+        ExpenseManager-&gt;&gt;ExpenseManager: Set status for user &amp; updateStatusHistory
+            ExpenseManager-&gt;&gt;Client: 200 OK
+        else User is not an expense participant
+            ExpenseManager-&gt;&gt;Client: 403 Forbidden
+        end
+    else Body is not Valid    
+        ExpenseManager-&gt;&gt;Client: 400 Bad Request
+    end
+
+
+    Client-&gt;&gt;ExpenseManager: Get group expenses GET /internal/expenses/groups/{group_id}
+    ExpenseManager-&gt;&gt;ExpenseManager: Get expenses data
+    ExpenseManager-&gt;&gt;Client: 200 OK
+    Note over Client,ExpenseManager:&lt;br&gt; Body: { &lt;br&gt; expensesFinanceData: ExpenseFinanceData[] &lt;br&gt;}
+
+    Client-&gt;&gt;ExpenseManager: Get user expenses GET /internal/expenses/groups/{group_id}/users/{user_id}
+    ExpenseManager-&gt;&gt;ExpenseManager: Get user expenses data
+    ExpenseManager-&gt;&gt;Client: 200 OK
+    Note over Client,ExpenseManager:&lt;br&gt; Body: { &lt;br&gt; expensesFinanceData: ExpenseFinanceData[] &lt;br&gt;}
+</code></pre>
+<h2 id="payment-manager">Payment Manager</h2>
+<pre class="mermaid"><code>classDiagram
+    class Payment {
+        id: String
+        groupId: String
+        creatorId: String
+        recipientId: String
+        title: String
+        type: "CASH" | "BANK_TRANSFER" | "MOBILE_PAYMENT" | "OTHER"
+        amount: Amount
+        fxData: FxData?
+        date: Date
+        createdAt: Date
+        updatedAt: Date
+        attachmentId: String?
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        history: PaymentHistoryEntry[]
+    }
+
+    class Amount {
+        value: Number
+        currency: String
+    }
+
+    class FxData {
+        targetCurrency: String
+        exchangeRate: Number
+    }
+
+    class PaymentHistoryEntry {
+        participantId: String
+        expenseAction: "ACCEPTED" | "REJECTED" | "CREATED" | "EDITED" | "DELETED"
+        createdAt: Date
+        comment: String?
+    }
+    class ArchivedPayment {
+        id: String
+        groupId: String
+        creatorId: String
+        recipientId: String
+        title: String
+        type: "CASH" | "BANK_TRANSFER" | "MOBILE_PAYMENT" | "OTHER"
+        amount: Amount
+        fxData: FxData?
+        date: Date
+        createdAt: Date
+        updatedAt: Date
+        attachmentId: String?
+        status: "ACCEPTED" | "REJECTED" | "PENDING"
+        history: PaymentHistoryEntry[]
+    }
+
+</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Client
+    participant PaymentManager
+
+    Client-&gt;&gt;PaymentManager: Create Payment POST /external/payments?group_id={group_id}
+    Note over Client,PaymentManager: token-validated: TOKEN&lt;br&gt; Body: { &lt;br&gt; recipientId:String &lt;br&gt; title: String&lt;br&gt; type: Type &lt;br&gt;attachmentId: String&lt;br&gt;sum: Number&lt;br&gt; currency: String&lt;br&gt; targetCurrency: String?&lt;br&gt;}
+    PaymentManager-&gt;&gt;PaymentManager:Validate body
+    alt Body is Valid
+        PaymentManager-&gt;&gt;PaymentManager: Check if user is a group member
+        alt User is a group member
+            PaymentManager-&gt;&gt;PaymentManager: Check if currency &amp; targetCurrency are available  &amp; if targetCurrency is main
+            alt Currencies are available
+                PaymentManager-&gt;&gt;PaymentManager: Check if recipient is a group member
+                alt Recipient is a group member
+                    PaymentManager-&gt;&gt;PaymentManager: Fetch exchange rate
+                    PaymentManager-&gt;&gt;PaymentManager: Create payment
+                    PaymentManager-&gt;&gt;Client: 201 Created
+                    Note over PaymentManager,Client: Body{&lt;br&gt; paymentId: String &lt;br&gt;}
+                else Recipient is not a group member
+                    PaymentManager-&gt;&gt;Client: 422 Unprocessable Content
+                end
+            else Currencies are not available
+                PaymentManager-&gt;&gt;Client: 400 Bad Request
+            end
+        else User is not a group member
+            PaymentManager-&gt;&gt;Client: 403 Forbidden
+        end
+    else Body is not valid
+        PaymentManager-&gt;&gt;Client: 400 Bad Request
+    end
+
+
+    Client-&gt;&gt;PaymentManager: Edit Payment PUT /external/payments/{payment_id}?group_id={group_id}
+    Note over Client,PaymentManager: token-validated: TOKEN&lt;br&gt; Body: { &lt;br&gt; recipientId:String &lt;br&gt; title: String&lt;br&gt; type: Type&lt;br&gt;sum: Number&lt;br&gt; currency: String&lt;br&gt; targetCurrency: String?&lt;br&gt;}
+    PaymentManager-&gt;&gt;PaymentManager:Validate body
+    alt Body is Valid
+        PaymentManager-&gt;&gt;PaymentManager: Check if user is a payment owner
+        alt Check if user is a payment owner
+            PaymentManager-&gt;&gt;PaymentManager: Check if currency &amp; targetCurrency are available  &amp; if targetCurrency is main
+            alt Currencies are available
+                PaymentManager-&gt;&gt;PaymentManager: Check if recipient is a group member
+                alt Recipient is a group member
+                    PaymentManager-&gt;&gt;PaymentManager: Fetch exchange rate
+                    PaymentManager-&gt;&gt;PaymentManager: Edit payment &amp; update statusHistory &amp; set all statuses to pending
+                    PaymentManager-&gt;&gt;Client: 201 Created
+                    Note over PaymentManager,Client: Body{&lt;br&gt; paymentId: String &lt;br&gt;}
+                else Recipient is not a group member
+                    PaymentManager-&gt;&gt;Client: 422 Unprocessable Content
+                end
+            else Currencies are not available
+                PaymentManager-&gt;&gt;Client: 400 Bad Request
+            end
+        else Check if user is not a payment owner
+            PaymentManager-&gt;&gt;Client: 403 Forbidden
+        end
+    else Body is not valid
+        PaymentManager-&gt;&gt;Client: 400 Bad Request
+    end
+
+
+    Client-&gt;&gt;PaymentManager: Delete payment DELETE /external/payments/{payment_id}?group_id={group_id}
+    Note over Client,PaymentManager: token-validated: TOKEN
+    PaymentManager-&gt;&gt;PaymentManager: Check if user is an owner of the payment
+    alt User is an owner of the payment
+        PaymentManager-&gt;&gt;PaymentManager: Delete payment
+        PaymentManager-&gt;&gt;Client: 200 OK
+    else User is not an owner of the payment
+        PaymentManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+
+    Client-&gt;&gt;PaymentManager: Get payment GET /external/payments/{payment_id}?group_id={group_id}
+    Note over Client,PaymentManager: token-validated: TOKEN
+    PaymentManager-&gt;&gt;PaymentManager: Check if user is a group member
+    alt User is a group member
+        PaymentManager-&gt;&gt;PaymentManager: Get payment data
+        PaymentManager-&gt;&gt;Client: 200 OK
+        Note over Client,PaymentManager:Body: {&lt;br&gt; id: String &lt;br&gt;creatorId: String&lt;br&gt; recipientId: String &lt;br&gt; title: String&lt;br&gt; type: Type&lt;br&gt;attachmentId:String&lt;br&gt; sum: Number&lt;br&gt; currency: String&lt;br&gt; targetCurrency: String?&lt;br&gt;exchangeRate:Number?&lt;br&gt;createdAt:Date&lt;br&gt;status: "ACCEPTED" | "REJECTED" | "PENDING"&lt;br&gt;statusHistory: StatusHistory[]&lt;br&gt;updatedAt: Date&lt;br&gt;}
+    else User is not a group member
+        PaymentManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+
+    Client-&gt;&gt;PaymentManager: Get payments GET /external/payments?group_id={group_id}&amp;filters=val
+    Note over Client,PaymentManager: token-validated: TOKEN
+    PaymentManager-&gt;&gt;PaymentManager: Check if user is a group member
+    alt User is a group member
+        PaymentManager-&gt;&gt;PaymentManager: Get filtered payments
+        PaymentManager-&gt;&gt;Client: 200 OK
+        Note over Client,PaymentManager:&lt;br&gt; Body: { &lt;br&gt; paymentsBasicData: PaymentBasicData[] &lt;br&gt;}
+    else User is not a group member
+        PaymentManager-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;PaymentManager: Accept or reject payment POST /external/decide/?group_id={group_id}&amp;payment_id={payment_id}
+    Note over Client,PaymentManager: token-validated: TOKEN &lt;br&gt; Body: { &lt;br&gt; decision: "ACCEPT" | "REJECT" &lt;br&gt; comment: String? &lt;br&gt;}
+    PaymentManager-&gt;&gt;PaymentManager:Validate body
+    alt Body is Valid
+        PaymentManager-&gt;&gt;PaymentManager: Check if user is a payment participant
+        alt User is a payment participant
+            PaymentManager-&gt;&gt;PaymentManager: Set status for user &amp; update StatusHistory
+            PaymentManager-&gt;&gt;Client: 200 OK
+        else User is not an payment participant
+            PaymentManager-&gt;&gt;Client: 403 Forbidden
+        end
+    else Body is not Valid
+        PaymentManager-&gt;&gt;Client: 400 Bad Request
+    end
+
+    Client-&gt;&gt;PaymentManager: Get group payments GET /internal/payments/groups/{group_id}
+    PaymentManager-&gt;&gt;PaymentManager: Get payments data
+    PaymentManager-&gt;&gt;Client: 200 OK
+    Note over Client,PaymentManager:&lt;br&gt; Body: { &lt;br&gt; paymentsFinanceData: PaymentsFinanceData[] &lt;br&gt;}
+
+    Client-&gt;&gt;PaymentManager: Get group payments GET /internal/payments/groups/{group_id}/users/{user_id}
+    PaymentManager-&gt;&gt;PaymentManager: Get user payments data
+    PaymentManager-&gt;&gt;Client: 200 OK
+    Note over Client,PaymentManager:&lt;br&gt; Body: { &lt;br&gt; paymentsFinanceData: PaymentsFinanceData[] &lt;br&gt;}
+</code></pre>
+<h2 id="finance-adapter">Finance Adapter</h2>
+<pre class="mermaid"><code>classDiagram
+    class Balances {
+        id: BalancesCompositeKey
+        balances: Balance[]
+    }
+
+    class BalancesCompositeKey {
+        groupId: String
+        currency: String
+    }
+
+    class Balance {
+        userId: String
+        balance: Number
+    }</code></pre>
+<p><pre class="mermaid"><code>classDiagram
+    class Settlements {
+        id: SettlementsCompositeKey
+        status: "PENDING" | "SAVED"
+        settlements: Settlement[]
+    }
+
+    class SettlementsCompositeKey {
+        groupId: String
+        currency: String
+    }
+
+    class Settlement {
+        fromUserId: String
+        toUserId: String
+        value: Number
+    }</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Client
+    participant FinanceAdapter
+
+    Client-&gt;&gt;FinanceAdapter: Get group balance &amp; suggested alignment GET /external/balances/groups/{group_id}
+    Note over Client,FinanceAdapter: token-validated: TOKEN
+    FinanceAdapter-&gt;&gt;FinanceAdapter: Check if user is a group member
+    alt User is a group member
+        FinanceAdapter-&gt;&gt;FinanceAdapter: Fetch group expense &amp; payment data
+        FinanceAdapter-&gt;&gt;FinanceAdapter: Get group balance &amp; suggested alignment
+        FinanceAdapter-&gt;&gt;Client: 200 OK
+        Note over FinanceAdapter,Client: Body: { &lt;br&gt; groupBalance: UserBalance[] &lt;br&gt; suggestedAlignment: SuggestedAlignment &lt;br&gt; }
+
+    else User is not a group member
+        FinanceAdapter-&gt;&gt;Client: 403 Forbidden
+    end
+
+
+    Client-&gt;&gt;FinanceAdapter: Get user balance GET /external/balances/groups/{group_id}/users
+    Note over Client,FinanceAdapter: token-validated: TOKEN
+    FinanceAdapter-&gt;&gt;FinanceAdapter: Check if user is a group member
+    alt User is a group member
+        FinanceAdapter-&gt;&gt;FinanceAdapter: Fetch user expense &amp; payment data
+        FinanceAdapter-&gt;&gt;FinanceAdapter: Get user balance
+        FinanceAdapter-&gt;&gt;Client: 200 OK
+        Note over FinanceAdapter,Client: Body: { &lt;br&gt; userBalance: Number &lt;br&gt; }
+    else User is not a group member
+        FinanceAdapter-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;FinanceAdapter: Get group balance GET /internal/balances/groups/{group_id}
+    FinanceAdapter-&gt;&gt;FinanceAdapter: Fetch user expense &amp; payment data
+    FinanceAdapter-&gt;&gt;FinanceAdapter: Get group balance
+    FinanceAdapter-&gt;&gt;Client: 200 OK
+    Note over FinanceAdapter,Client: Body: { &lt;br&gt; groupBalance: UserBalance[] &lt;br&gt; }
+
+
+
+    Client-&gt;&gt;FinanceAdapter: Get group balance  &amp; suggested alignment &amp; finance data GET /internal/reports/groups/{group_id}
+    FinanceAdapter-&gt;&gt;FinanceAdapter: Fetch group expense &amp; payment data
+    FinanceAdapter-&gt;&gt;FinanceAdapter: Get group balance
+    FinanceAdapter-&gt;&gt;Client: 200 OK
+    Note over FinanceAdapter,Client: Body: { &lt;br&gt; groupBalance: UserBalance[] &lt;br&gt; suggestedAlignment: SuggestedAlignment&lt;br&gt; groupFinances: GroupFinances &lt;br&gt; }
+
+</code></pre></p>
+<h2 id="report-creator">Report Creator</h2>
+<pre class="mermaid"><code>classDiagram
+    class Report {
+        id: String
+        groupId: String
+        format: "PDF" | "XLSX"
+        creatorId: String
+        createdAt: Date
+        attachmentId: String
+    }</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Client
+    participant ReportCreator
+
+    Client-&gt;&gt;ReportCreator: Generate report POST /external/generate?group_id={group_id}
+    Note over Client,ReportCreator: token-validated: TOKEN
+    ReportCreator-&gt;&gt;ReportCreator: Check if user is a group member
+    alt User is a group member
+        ReportCreator-&gt;&gt;ReportCreator: Fetch expense &amp; payment data
+        ReportCreator-&gt;&gt;ReportCreator: Fetch group members details
+        ReportCreator-&gt;&gt;ReportCreator: Create report pdf &amp; csv
+        ReportCreator-&gt;&gt;ReportCreator: Send report to AttachmentStore
+        ReportCreator-&gt;&gt;Client: 201 Created
+    else User is not a group member
+        ReportCreator-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;ReportCreator: Get reports GET /external/reports?group_id={group_id}
+    Note over Client,ReportCreator: token-validated: TOKEN
+    ReportCreator-&gt;&gt;ReportCreator: Check if user is a group member
+    alt User is a group member
+        ReportCreator-&gt;&gt;ReportCreator: Get report list
+        ReportCreator-&gt;&gt;Client: 200 OK
+        Note over ReportCreator,Client: Body: {&lt;br&gt; reportsData: ReportData[] &lt;br&gt;}
+    else User is not a group member
+        ReportCreator-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;ReportCreator: Send report by mail POST /external/send-report/{attachment_id   }
+    Note over Client,ReportCreator: token-validated: TOKEN
+    ReportCreator-&gt;&gt;ReportCreator: Check if user is a group member
+    alt User is a group member
+        ReportCreator-&gt;&gt;ReportCreator: Order EmailSender to send report
+        ReportCreator-&gt;&gt;Client: 200 Ok
+    else User is not a group member
+        ReportCreator-&gt;&gt;Client: 403 Forbidden
+    end
+</code></pre>
+<h2 id="currency-manager">Currency Manager</h2>
+<pre class="mermaid"><code>classDiagram
+    class ExchangeRate {
+        currencyFrom: String
+        currencyTo: String
+        rate: Number
+        createdAt: Date
+        forDate: Date
+        validTo: Date
+    }</code></pre>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Client
+    participant CurrencyManager
+
+
+    Client-&gt;&gt;CurrencyManager: Get available currencies GET /external/currencies
+    Note over Client,CurrencyManager: token-validated: TOKEN
+    CurrencyManager-&gt;&gt;CurrencyManager: Get available currencies
+    CurrencyManager-&gt;&gt;Client: 200 OK
+    Note over CurrencyManager,Client: Body{&lt;br&gt; currencies: String[]&lt;br&gt;}
+
+    Client-&gt;&gt;CurrencyManager: Get available currencies GET /internal/currencies
+    CurrencyManager-&gt;&gt;CurrencyManager: Get available currencies
+    CurrencyManager-&gt;&gt;Client: 200 OK
+    Note over CurrencyManager,Client: Body{&lt;br&gt; currencies: String[]&lt;br&gt;}
+
+    Client-&gt;&gt;CurrencyManager: Get exchange rate GET /external/exchange-rate?currencyFrom=val1&amp;currencyTo=val2?date=val3
+    Note over Client,CurrencyManager: token-validated: TOKEN
+    CurrencyManager-&gt;&gt;CurrencyManager: Validate query params
+    alt Query params are valid
+        CurrencyManager-&gt;&gt;CurrencyManager: Check if currencies are available
+        alt Currencies are available
+            CurrencyManager-&gt;&gt;CurrencyManager: Check if exchange rate is cached
+            alt exchange rate is cached
+                CurrencyManager-&gt;&gt;CurrencyManager: Get exchange-rate
+                CurrencyManager-&gt;&gt;Client: 200 OK
+                Note over CurrencyManager,Client: Body{&lt;br&gt; exchangeRate: Number&lt;br&gt;}
+            else exchange rate is not cached
+                CurrencyManager-&gt;&gt;Client: 424 Failed Dependency
+            end
+        else Currencies are not available
+            CurrencyManager-&gt;&gt;Client: 400 Bad Request
+        end
+    else Query params are not valid
+        CurrencyManager-&gt;&gt;Client: 400 Bad Request
+    end
+
+    Client-&gt;&gt;CurrencyManager: Get exchange rate GET /internal/exchange-rate?currencyFrom=val1&amp;currencyTo=val2?date=val3
+    CurrencyManager-&gt;&gt;CurrencyManager: Check if exchange rate is cached
+    alt exchange rate is cached
+        CurrencyManager-&gt;&gt;CurrencyManager: Get exchange-rate
+        CurrencyManager-&gt;&gt;Client: 200 OK
+        Note over CurrencyManager,Client: Body{&lt;br&gt; exchangeRate: Number&lt;br&gt;}
+    else exchange rate is not cached
+        CurrencyManager-&gt;&gt;Client: 424 Failed Dependency
+    end
+</code></pre>
+<h2 id="attachment-store">Attachment Store</h2>
+<pre class="mermaid"><code>
+classDiagram
+    class UserAttachment {
+    id: String
+    userId: String
+    contentType: String
+    sizeInBytes: Number
+    file: Binary
+    createdAt: Date
+    updatedAt: Date
+    attachmentHistory: AttachmentHistory[]
+    }
+
+    class GroupAttachment {
+        id: String
+        groupId: String
+        uploadedByUser: String
+        contentType: String
+        sizeInBytes: Number
+        file: Binary
+        strictAccess: Boolean
+        createdAt: Date
+        updatedAt: Date
+        attachmentHistory: AttachmentHistory[]
+    }
+
+    class AttachmentHistory {
+        updateBy: String
+        updatedAt: Date
+        sizeInBytes: Number
+        contentType: String
+    }</code></pre>
+<pre class="mermaid"><code>
+sequenceDiagram
+
+    participant Client
+    participant AttachmentStore
+
+    Client-&gt;&gt;AttachmentStore: Upload Attachment POST /external/attachments
+    Note over Client,AttachmentStore: token-validated: TOKEN&lt;br&gt;Body: ByteArray
+    activate AttachmentStore
+    AttachmentStore-&gt;&gt;AttachmentStore: Check media type
+    alt Media type is allowed
+        AttachmentStore-&gt;&gt;AttachmentStore: Check attachment size
+        alt Attachment size within limit
+            AttachmentStore-&gt;&gt;AttachmentStore: Save attachment
+            AttachmentStore-&gt;&gt;Client: 201 Created
+            deactivate AttachmentStore
+            Note over Client,AttachmentStore: content-type: MEDIA_TYPE&lt;br&gt;Body: {&lt;br&gt;attachmentId: "AttachmentId",&lt;br&gt;}
+        else Attachment size exceeds limit
+            AttachmentStore-&gt;&gt;Client: 413 Payload Too Large
+        end
+    else Media type is not allowed
+        AttachmentStore-&gt;&gt;Client: 415 Unsupported Media Type
+    end
+
+    Client-&gt;&gt;AttachmentStore: Upload Attachment POST external/attachments/groups/{groupId}
+    Note over Client,AttachmentStore: token-validated:TOKEN&lt;br&gt;Body:ByteArray
+    activate AttachmentStore
+    AttachmentStore-&gt;&gt;AttachmentStore: Check access to group for that user
+    alt User has access to group
+        AttachmentStore-&gt;&gt;AttachmentStore: Check media type
+        alt Media type is allowed
+            AttachmentStore-&gt;&gt;AttachmentStore: Check attachment size
+            alt Attachment size within limit
+                AttachmentStore-&gt;&gt;AttachmentStore: Save attachment
+                AttachmentStore-&gt;&gt;Client: 201 Created
+                deactivate AttachmentStore
+                Note over Client,AttachmentStore: content-type:MEDIA_TYPE&lt;br&gt;Body: {&lt;br&gt;attachmentId:"AttachmentId",&lt;br&gt;}
+            else Attachment size exceeds limit
+                AttachmentStore-&gt;&gt;Client: 413 Payload Too Large
+            end
+        else Media type is not allowed
+            AttachmentStore-&gt;&gt;Client: 415 Unsupported Media Type
+        end
+    else User does not have access to group
+        AttachmentStore-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;AttachmentStore: Get Attachment GET /external/attachments/{attachmentId}
+    Note over Client,AttachmentStore: token-validated: TOKEN
+    activate AttachmentStore
+    AttachmentStore-&gt;&gt;AttachmentStore: Check user access to attachment
+    alt User has access to attachment
+        AttachmentStore-&gt;&gt;AttachmentStore: Check attachment exists
+        alt Attachment is found
+            AttachmentStore-&gt;&gt;AttachmentStore: Get attachment
+            AttachmentStore-&gt;&gt;Client: 200 OK
+            deactivate AttachmentStore
+            Note over Client,AttachmentStore: content-type: MEDIA_TYPE&lt;br&gt;Body: ByteArray
+        else Attachment is not found
+            AttachmentStore-&gt;&gt;Client: 404 Not Found
+        end
+    else User does not have access to attachment
+        AttachmentStore-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;AttachmentStore: Get Attachment GET /external/attachments/groups/{groupId}/{attachmentId}
+    Note over Client,AttachmentStore: token-validated: TOKEN
+    activate AttachmentStore
+    AttachmentStore-&gt;&gt;AttachmentStore: Check user access to attachment
+    alt User has access to attachment
+        AttachmentStore-&gt;&gt;AttachmentStore: Check attachment exists
+        alt Attachment is found
+            AttachmentStore-&gt;&gt;AttachmentStore: Get attachment
+            AttachmentStore-&gt;&gt;Client: 200 OK
+            deactivate AttachmentStore
+            Note over Client,AttachmentStore: content-type: MEDIA_TYPE&lt;br&gt;Body: ByteArray
+        else Attachment is not found
+            AttachmentStore-&gt;&gt;Client: 404 Not Found
+        end
+    else User does not have access to attachment
+        AttachmentStore-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;AttachmentStore: Update Attachment PUT /external/attachments/{attachmentId}
+    Note over Client,AttachmentStore: token-validated: TOKEN&lt;br&gt;Body: Updated Attachment Data
+    activate AttachmentStore
+    AttachmentStore-&gt;&gt;AttachmentStore: Check if user has access to attachment
+    alt User has access to attachment
+        AttachmentStore-&gt;&gt;AttachmentStore: Check if attachment exists
+        alt Attachment exists
+            AttachmentStore-&gt;&gt;AttachmentStore: Check if updated media type is the same
+            alt Media type is the same
+                AttachmentStore-&gt;&gt;AttachmentStore: Update attachment data
+                AttachmentStore-&gt;&gt;Client: 200 OK
+                Note over Client,AttachmentStore: content-type:MEDIA_TYPE&lt;br&gt;Body: {&lt;br&gt;attachmentId:"AttachmentId",&lt;br&gt;}
+                deactivate AttachmentStore
+            else Media type is not the same
+                AttachmentStore-&gt;&gt;Client: 415 Unsupported Media Type
+            end
+        else Attachment does not exist
+            AttachmentStore-&gt;&gt;Client: 404 Not Found
+        end
+    else User does not have access to attachment
+        AttachmentStore-&gt;&gt;Client: 403 Forbidden
+    end
+
+    Client-&gt;&gt;AttachmentStore: Update Attachment PUT /external/attachments/groups/{groupId}/{attachmentId}
+    Note over Client,AttachmentStore: token-validated: TOKEN&lt;br&gt;Body: Updated Attachment Data
+    activate AttachmentStore
+    AttachmentStore-&gt;&gt;AttachmentStore: Check if user has access to attachment in the group
+    alt User has access to attachment in the group
+        AttachmentStore-&gt;&gt;AttachmentStore: Check if attachment exists in the group
+        alt Attachment exists in the group
+            AttachmentStore-&gt;&gt;AttachmentStore: Check if updated media type is the same
+            alt Media type is the same
+                AttachmentStore-&gt;&gt;AttachmentStore: Update attachment data
+                AttachmentStore-&gt;&gt;Client: 200 OK
+                Note over Client,AttachmentStore: content-type:MEDIA_TYPE&lt;br&gt;Body: {&lt;br&gt;attachmentId:"AttachmentId",&lt;br&gt;}
+                deactivate AttachmentStore
+            else Media type is not the same
+                AttachmentStore-&gt;&gt;Client: 415 Unsupported Media Type
+            end
+        else Attachment does not exist in the group
+            AttachmentStore-&gt;&gt;Client: 404 Not Found
+        end
+    else User does not have access to attachment in the group
+        AttachmentStore-&gt;&gt;Client: 403 Forbidden
+    end
+</code></pre>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Powrót do góry
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2024 <a href="https://github.com/Group-Expense-Manager"  target="_blank" rel="noopener">GEM Project</a>
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Group-Expense-Manager" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Skopiowano do schowka", "clipboard.copy": "Kopiuj do schowka", "search.result.more.one": "1 wi\u0119cej na tej stronie", "search.result.more.other": "# wi\u0119cej na tej stronie", "search.result.none": "Brak wynik\u00f3w wyszukiwania", "search.result.one": "Wyniki wyszukiwania: 1", "search.result.other": "Wyniki wyszukiwania: #", "search.result.placeholder": "Zacznij pisa\u0107, aby szuka\u0107", "search.result.term.missing": "Brak", "select.version": "Wybierz wersj\u0119"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="../javascripts/extra.js"></script>
+      
+    
+  </body>
+</html>
