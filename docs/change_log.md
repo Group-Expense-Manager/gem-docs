@@ -187,3 +187,7 @@
 * Pisanie 3 i 4 rozdziału pracy inżynierskiej
 * poprawki w FinanceAdapterze
 * dodanie dependabota do repozytoriów
+### 25.11.2024 - 05.12.2024
+* Dodanie swaggera i micrometera do mikroserwisów
+* Pisanie 5 rozdziału
+* Konsultacje w ramach PP2
